@@ -1,0 +1,45 @@
+@import "variables.scss";
+
+.ui-btn {
+    outline: none;
+    box-shadow: none;
+    border: none;
+    height: 30px;
+    text-align: center;
+    min-width: 30px;
+    margin-left: 10px;
+    background: transparent;
+    cursor: pointer;
+}
+
+.ui-btn-save {
+    background: rgba(16, 125, 242, 0.816);
+    color: $ui-second-border-color
+}
+
+.ui-btn-save:hover {
+    background: rgb(16, 125, 242) !important;
+}
+
+.ui-btn:hover {
+    background: rgba(0, 0, 0, 0.1)
+}
+
+.ui-select {
+    outline: none;
+    box-shadow: none;
+    border: none;
+    border-bottom: 1px solid $ui-primary-border-color;
+    height: 30px;
+    text-align: center;
+    min-width: 100px;
+}
+
+.ui-input {
+    outline: none;
+    box-shadow: none;
+    border: none;
+    border-bottom: 1px solid $ui-primary-border-color;
+    height: 30px;
+    text-align: center;
+}
