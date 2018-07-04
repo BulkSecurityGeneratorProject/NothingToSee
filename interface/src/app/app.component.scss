@@ -1,19 +1,17 @@
-@import "../customElements.scss";
-
-.ui-nav-bar {
+@import "../custom-elements.scss";
+.ui-container {
+    float: left;
+    width: calc(100% - 220px);
+    height: calc(100% - 50px);
+    padding: 20px;
+}
+.ui-nav {
     float: left;
     width: 100%;
     height: 50px;
-    padding-left: 20px;
-    padding-right: 20px;
-    background: $ui-primary-color;
-    color: $ui-primary-text-color;
-    line-height: 50px;
-    box-shadow: 0px 0px 10px 1px rgb(187, 187, 187);
 }
-.ui-container {
+.ui-side {
     float: left;
-    width: 100%;
+    width: 220px;
     height: calc(100% - 50px);
-    padding: 20px;
 }

@@ -3,7 +3,6 @@ import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ExecutionDiary } from '../shared/dto/execution-diary';
 import { Observable } from 'rxjs/internal/Observable';
-import { Cabinet } from  '../shared/dto/cabinet';
 import { Equipment } from  '../shared/dto/Equipment';
 import { Board } from '../shared/dto/board';
 

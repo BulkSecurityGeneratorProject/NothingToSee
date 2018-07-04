@@ -6,21 +6,27 @@ import { AppComponent } from './app.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { PlanningComponent } from './planning/planning.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from 'src/app/app.routing.module';
+import { CustomMaterialModule } from 'src/app/shared/material/custom-material.module';
+import { SideBarComponent } from 'src/app/side-bar/side-bar.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     NavBarComponent,
-    PlanningComponent
+    PlanningComponent,
+    SideBarComponent
   ],
   imports: [
     AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule,
+    CustomMaterialModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
