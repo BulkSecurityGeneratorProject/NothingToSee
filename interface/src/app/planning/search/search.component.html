@@ -1,0 +1,18 @@
+<div class = "ui-stepper-container">
+    <form [formGroup] = "firstFormGroup">
+        <mat-form-field class = "ui-form-field">
+            <input matInput placeholder="At" formControlName="firstCtrl" required>
+        </mat-form-field>
+        <mat-form-field class = "ui-form-field">
+            <input matInput placeholder="Cnl" formControlName="firstCtrl" required>
+        </mat-form-field>
+        <mat-form-field class = "ui-form-field">
+            <select class = "ui-select"  [(ngModel)] = "planning.executionDiaryId">
+                <option [value] = "-1" [selected] = "true">Selecine um diário</option>
+                <option class = "select-option" [value] = "executionDiary.id" *ngFor = "let executionDiary of executionDiaries">
+                    {{ executionDiary.name }}
+                </option>
+            </select>
+        </mat-form-field>
+    </form>
+</div>

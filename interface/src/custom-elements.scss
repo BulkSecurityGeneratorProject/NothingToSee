@@ -54,3 +54,37 @@
     border-radius: 14px;
     line-height: 23px;
 }
+
+// To the stepper
+
+.ui-stepper-container {
+    float: left;
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding-top: 20px;
+}
+.ui-form-field {
+    float: left;
+    margin-left: 20px;
+    height: 40px;
+    font-size: 12px;
+}
+.mat-step-header .mat-step-icon { 
+    background-color: $ui-primary-color;
+}
+
+// .mat-step-header {
+//     background-color: red;
+// }
+// .mat-step-header:hover {
+//     background-color: red;
+// }
+
+
+// .mat-stepper-horizontal-line {
+//     display: none;
+// }
+// .mat-step-icon-not-touched {
+    
+// }

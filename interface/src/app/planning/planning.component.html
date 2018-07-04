@@ -6,17 +6,9 @@
 
     <mat-step [stepControl] = "firstFormGroup">
         <ng-template matStepLabel > Procurar diário, cnl e at </ng-template>
-        <form [formGroup] = "firstFormGroup">
-            <mat-form-field>
-                <input matInput placeholder="Last name, First name" formControlName="firstCtrl" required>
-            </mat-form-field>
-            <div>
-                <button mat-button matStepperNext>Next</button>
-            </div>
-        </form>
     </mat-step>
     <mat-step>
-        <ng-template matStepLabel > Realizar manobras </ng-template>
+        <ng-template matStepLabel>Realizar manobras</ng-template>
         <form [formGroup]="secondFormGroup">
         </form>
     </mat-step>
