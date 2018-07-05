@@ -17,7 +17,7 @@ export class PlanningService {
         executionDiaries.add( new ExecutionDiary('10', 'Manobra 2') )
         executionDiaries.add( new ExecutionDiary('20', 'Manobra 3'));
         executionDiaries.add( new ExecutionDiary('30', 'Manobra 4'));
-        
+
         return Observable.create(( observer ) => {
             observer.next( executionDiaries )
         })
@@ -27,17 +27,17 @@ export class PlanningService {
     searchEquipments( diaryQuery ) {
         const equipments = {};
         const equipmentsSource = new Array<Equipment>()
-        const boards1 = new Array<Board>(...[ 
+        const boards1 = new Array<Board>(...[
             new Board('x'),
             new Board('y'),
             new Board('z'),
         ]);
-        const boards2 = new Array<Board>(...[ 
+        const boards2 = new Array<Board>(...[
             new Board('x1'),
             new Board('y1'),
             new Board('z1'),
         ]);
-        const boards3 = new Array<Board>(...[ 
+        const boards3 = new Array<Board>(...[
             new Board('x2'),
             new Board('y2'),
             new Board('z2'),
@@ -48,17 +48,17 @@ export class PlanningService {
         equipmentsSource.push( new Equipment( 'GPON', '142', boards3))
 
         const equipmentsTarget = new Array<Equipment>()
-        const boards12 = new Array<Board>(...[ 
+        const boards12 = new Array<Board>(...[
             new Board('x'),
             new Board('y'),
             new Board('z'),
         ]);
-        const boards22 = new Array<Board>(...[ 
+        const boards22 = new Array<Board>(...[
             new Board('x1'),
             new Board('y1'),
             new Board('z1'),
         ]);
-        const boards32 = new Array<Board>(...[ 
+        const boards32 = new Array<Board>(...[
             new Board('x2'),
             new Board('y2'),
             new Board('z2'),
@@ -77,6 +77,5 @@ export class PlanningService {
         // return this.http.get<Armary>( this.url, { params: diaryQuery });
     }
     searchPlanning( request ) {
-
     }
 }

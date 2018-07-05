@@ -13,12 +13,13 @@
     background: $ui-primary-color;
     color: $ui-primary-text-color;
     line-height: 50px;
-    box-shadow: 0px 0px 15px 2px rgb(126, 125, 125);
+    box-shadow: 0px 0px 15px 2px $side-bar-primary-color;
     z-index: 2;
 }
 .ui-nav-bar-system-name {
     float: left;
     height: 100%;
+    color: $ui-primary-text-color;
 }
 .ui-nav-bar-user {
     float: right;

@@ -10,6 +10,7 @@
     padding-top: 30px;
     padding-bottom: 30px;
     border-right: 1px solid $ui-primary-border-color;
+    background: $side-bar-primary-color;
 }
 
 .ui-side-bar-options {
@@ -25,17 +26,30 @@
     height: 40px;
     line-height: 40px;
 }
-
+.mat-button-toggle-checked {
+  background: $ui-side-bar-option-selected !important;
+}
+.mat-button-toggle-checked span {
+  color: $ui-side-bar-option-selected-text !important
+}
 .ui-side-bar-option > button {
     padding-left: 30px;
     width: 100%;
     height: 100%;
     text-align: left;
     line-height: 40px;
-    color: $ui-second-text-color;
+    background: red !important;
 }
 .ui-side-bar-option span {
-    color: $ui-second-text-color;
+    color: $ui-side-bar-second-text-color;
     margin-left: 5px;
     font-size: 14px;
-}   
+}
+.ui-side-bar-option:hover {
+  background: $ui-side-bar-option-hover;
+  // text-shadow: 0px 0px 10px $ui-side-bar-second-text-color;
+}
+
+.ui-side-bar-option:hover span {
+
+}

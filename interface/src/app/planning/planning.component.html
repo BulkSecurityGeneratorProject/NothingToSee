@@ -4,15 +4,18 @@
         <mat-icon class = "fa fa-check"></mat-icon>
     </ng-template>
 
-    <mat-step [stepControl] = "firstFormGroup">
-        <ng-template matStepLabel > Procurar diário, cnl e at </ng-template>
+    <mat-step [stepControl] = "searchEquipments">
+      <ng-template matStepLabel > Procurar equipamentos </ng-template>
+      <search-equipments></search-equipments>
     </mat-step>
-    <mat-step>
-        <ng-template matStepLabel>Realizar manobras</ng-template>
-        <form [formGroup]="secondFormGroup">
-        </form>
+    <mat-step [stepControl] = "changeEquipments">
+      <ng-template matStepLabel > Realizar manobras </ng-template>
+      <change-equipments></change-equipments>
+        <!-- <ng-template matStepLabel>Realizar manobras</ng-template> -->
     </mat-step>
-    <mat-step>
-        <ng-template matStepLabel > Salvar e simular </ng-template>
+    <mat-step [stepControl] = "saveEquipmentsChanges">
+      <ng-template matStepLabel > Salvar e simular </ng-template>
+      <save-equipments-changes></save-equipments-changes>
+        <!-- <ng-template matStepLabel > Salvar e simular </ng-template> -->
     </mat-step>
 </mat-horizontal-stepper>

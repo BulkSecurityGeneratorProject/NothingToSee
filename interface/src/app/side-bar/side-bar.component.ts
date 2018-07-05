@@ -19,7 +19,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.router.events.subscribe((event) =>{
       if ( event instanceof NavigationEnd ) {
-        this.state = event.url.replace('/', '').split('/')[0].split('?')[0];
+        this.state = event.urlAfterRedirects.replace('/', '').split('/')[0].split('?')[0];
       }
     })
   }
@@ -32,11 +32,4 @@ export class SideBarComponent implements OnInit, OnDestroy {
   navigate() {
     this.router.navigate(['/' + this.state ])
   }
-
-  // let params = { queryParams: { 
-    //       executionDiaryId: this.planning.executionDiaryId, 
-    //       at: this.planning.at, 
-    //       cnl: this.planning.cnl }
-    //     }
-    //     this.router.navigate(['/planning'], params)
 }
