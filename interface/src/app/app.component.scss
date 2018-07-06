@@ -1,17 +1,33 @@
 @import "../custom-elements.scss";
-.ui-container {
-    float: left;
-    width: calc(100% - 220px);
-    height: calc(100% - 50px);
-    padding: 20px;
-}
 .ui-nav {
     float: left;
     width: 100%;
     height: 50px;
 }
+
+.ui-container {
+    float: left;
+    height: calc(100% - 50px);
+    padding: 20px;
+    overflow-y: auto;
+}
 .ui-side {
     float: left;
-    width: 220px;
     height: calc(100% - 50px);
+}
+@media(max-width: 800px) {
+    .ui-side {
+        width: 50px;
+    }
+    .ui-container {
+        width: calc(100% - 50px);
+    }
+}
+@media(min-width: 801px) {
+    .ui-side {
+        width: 200px;
+    }
+    .ui-container {
+        width: calc(100% - 200px);
+    }
 }

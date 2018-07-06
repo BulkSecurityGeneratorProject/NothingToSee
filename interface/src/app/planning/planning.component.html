@@ -1,5 +1,5 @@
 
-<mat-horizontal-stepper linear="true" #stepper>
+<mat-horizontal-stepper #stepper linear="true" (selectionChange)="doSomething($event)">
     <ng-template matStepperIcon="edit">
         <mat-icon class = "fa fa-check"></mat-icon>
     </ng-template>

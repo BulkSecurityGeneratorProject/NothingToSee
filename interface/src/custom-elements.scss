@@ -3,24 +3,29 @@
 
 
 .ui-btn {
-    outline: none;
-    box-shadow: none;
-    border: none;
-    height: 30px;
-    text-align: center;
-    min-width: 30px;
-    margin-left: 10px;
-    background: transparent;
-    cursor: pointer;
+    color: $ui-second-text-color;
+    font-size: 25px;
+    line-height: 25px;
+    width: 50px;
+    height: 50px;
 }
 
-.ui-btn-save {
+.ui-btn-primary {
     background: rgba(16, 125, 242, 0.816);
     color: $ui-second-border-color
 }
 
-.ui-btn-save:hover {
+.ui-btn-primary:hover {
     background: rgb(16, 125, 242) !important;
+}
+
+.ui-btn-next {
+    background: $ui-tertiary-color;
+    color: $ui-second-border-color
+}
+
+.ui-btn-next:hover {
+    background: $ui-tertiary-color;
 }
 
 .ui-btn:hover {
@@ -55,7 +60,10 @@
     line-height: 23px;
 }
 
-// To the stepper
+/*
+    Overriding materal css
+
+*/
 
 .ui-stepper-container {
     float: left;
@@ -74,6 +82,17 @@
     background-color: $ui-primary-color;
 }
 
+.mat-form-field.mat-focused .mat-form-field-ripple {
+    background-color: $ui-primary-color;
+}
+.mat-form-field.mat-focused .mat-form-field-label {
+    color: $ui-primary-color;
+}
+
+.mat-horizontal-stepper-header{
+    pointer-events: none !important;
+    cursor: pointer;
+}
 // .mat-step-header {
 //     background-color: red;
 // }

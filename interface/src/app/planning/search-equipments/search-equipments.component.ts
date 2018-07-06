@@ -1,9 +1,10 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, Optional } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Subject } from 'rxjs/internal/Subject';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { MatStepper } from '@angular/material';
 import { PlanningService } from '../planning.service'
+import { PlanningComponent } from 'src/app/planning/planning.component';
 
 @Component({
   selector: 'search-equipments',
@@ -19,12 +20,14 @@ export class SearchEquipmentsComponent implements OnInit, OnDestroy {
     private planningService: PlanningService,
     private router: Router,
     private route: ActivatedRoute,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    @Optional() public planningComponent: PlanningComponent
   ) {}
 
   ngOnInit() {
     this.initializeDiaries();
     this.initializeForms();
+    this.planningComponent.setActualForm( this.searchEquipments );
   }
 
   ngOnDestroy(): void {

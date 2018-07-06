@@ -2,11 +2,11 @@
     <mat-button-toggle-group #group="matButtonToggleGroup" class = "ui-side-bar-options" (change) = "navigate()" [(ngModel)] = "state">
         <mat-button-toggle class = "ui-side-bar-option" value="planning">
             <span class = "fa fa-plus"></span>
-            <span> Plano de manobra </span>
+            <span class = "ui-side-bar-option-name"> Plano de manobra </span>
         </mat-button-toggle>
         <mat-button-toggle class = "ui-side-bar-option" value="planSearch">
             <span class = "fa fa-search"></span>
-            <span>  Buscar planos </span>
+            <span class = "ui-side-bar-option-name">  Buscar planos </span>
         </mat-button-toggle>
     </mat-button-toggle-group>
 </mat-sidenav-container>

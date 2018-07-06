@@ -1,0 +1,18 @@
+@import "../app.component.scss";
+.ui-stepper-container {
+    float: left;
+    height: 100%;
+    width: 100%;
+}
+.ui-stepper-form {
+    float: left;
+    margin: auto;
+}
+.ui-stepper-navigation {
+    float: left;
+    width: 100%;
+    padding-top: 20px;
+}
+.ui-stepper-navigation button {
+    margin: auto;
+}

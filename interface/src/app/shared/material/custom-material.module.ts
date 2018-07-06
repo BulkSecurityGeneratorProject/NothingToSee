@@ -1,5 +1,5 @@
 import { MatStepperModule, MatFormFieldModule, MatInputModule, MatIconModule, MatBadgeModule,
-MatIconRegistry, MatToolbarModule, MatSidenavModule, MatButtonModule, MatButtonToggleModule
+MatIconRegistry, MatToolbarModule, MatSidenavModule, MatButtonModule, MatButtonToggleModule,
 MatSelectModule } from '@angular/material'
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';

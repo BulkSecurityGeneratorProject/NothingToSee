@@ -1,17 +1,24 @@
 <div class = "ui-stepper-container">
-    <form [formGroup] = "searchEquipments">
-        <mat-form-field class = "ui-form-field">
-            <input matInput placeholder="At" formControlName="at" required>
-        </mat-form-field>
-        <mat-form-field class = "ui-form-field">
-            <input matInput placeholder="Cnl" formControlName="cnl" required>
-        </mat-form-field>
-        <mat-form-field class = "ui-form-field">
-          <mat-select placeholder="Favorite food">
-              <mat-option *ngFor = "let executionDiary of executionDiaries" [value] = "executionDiary.id" >
-                {{ executionDiary?.name }}
-              </mat-option>
-          </mat-select>
-        </mat-form-field>
-    </form>
+    <div class = "ui-stepper-form">
+        <form [formGroup] = "searchEquipments">
+            <mat-form-field class = "ui-form-field">
+                <input matInput placeholder="At" formControlName="at" required>
+            </mat-form-field>
+            <mat-form-field class = "ui-form-field">
+                <input matInput placeholder="Cnl" formControlName="cnl" required>
+            </mat-form-field>
+            <mat-form-field class = "ui-form-field">
+            <mat-select placeholder="Diário de execução">
+                <mat-option *ngFor = "let executionDiary of executionDiaries" [value] = "executionDiary.id" >
+                    {{ executionDiary?.name }}
+                </mat-option>
+            </mat-select>
+            </mat-form-field>
+        </form>
+    </div>
+    <div class = "ui-stepper-navigation">
+        <button mat-button class = "ui-btn">
+            <span class = "fa fa-arrow-circle-right"></span>
+        </button>
+    </div>
 </div>

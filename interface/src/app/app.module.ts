@@ -23,7 +23,7 @@ import { PlanningModule } from 'src/app/planning/planning.module';
     BrowserModule,
     HttpClientModule,
     CustomMaterialModule,
-    PlanningModule
+    PlanningModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
