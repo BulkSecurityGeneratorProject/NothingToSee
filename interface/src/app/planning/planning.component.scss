@@ -5,13 +5,6 @@
     width: 100%;
     padding-top: 10px;
 }
-.ui-stepper-header {
-    float: left;
-    width: 100%;
-    height: 40px;
-    display: table;
-    padding: 10px;
-}
 .ui-stepper-container {
     float: left;
     width: 100%;
@@ -23,62 +16,13 @@
     height: 40px;
     padding-right: 20px;
 }
-.ui-step {
-    display: table-cell;
-    font-size: 14px;
-    color: $ui-second-text-color;
-    height: 30px;
-    line-height: 30px;
-}
-
-.ui-step-name {
-    float: left;
-    margin-left: 20px;
-}
-
-.ui-step-divisor {
-    float: left;
-    margin-left: 10px;
-}
-
-.ui-step-divisor span {
-    position: absolute;
-    margin-left: -15px;
-    font-size: 48px;
-    margin-top: -8px
-}
-
-.ui-step-not-activated {
-    background: $ui-second-color;
-    color: $ui-primary-text-color;   
-}
-
-.ui-step-actual {
-    background: $ui-primary-color;
-    color: $ui-primary-text-color;   
-}
-
-.ui-step-done {
-    background: $ui-tertiary-color;
-    color: $ui-primary-text-color;   
-}
-
-.ui-stepper-progress-bar {
-    float: left;
-    width: calc(100% - 200px);
-    padding: 20px;
-    margin-top: 5px;
-    padding-left: 40px;
-    padding-right: 40px;
-}
 .ui-stepper-form {
-    height: calc(100vh - 300px);
     display: flex;
+    height: calc(100vh - 300px);
+    min-height: 100px;
     align-content: center;
     align-items: center;
     margin: auto;
-    // padding-top: 20px;
-    // overflow-y: auto;
 }
 .ui-stepper-form form {
     margin: auto;

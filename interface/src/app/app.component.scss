@@ -13,19 +13,19 @@
 }
 .ui-side {
     float: left;
-    height: calc(100% - 50px);
 }
 @media(max-width: 800px) {
     .ui-side {
-        width: 50px;
+        width: 100%;
     }
     .ui-container {
-        width: calc(100% - 50px);
+        width: 100%;
     }
 }
 @media(min-width: 801px) {
     .ui-side {
         width: 200px;
+        height: calc(100% - 50px);
     }
     .ui-container {
         width: calc(100% - 200px);
