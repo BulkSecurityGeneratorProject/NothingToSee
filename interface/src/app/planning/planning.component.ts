@@ -8,7 +8,7 @@ import { Planning } from  '../shared/dto/planning';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { Equipment } from 'src/app/shared/dto/equipment';
 import { MatStepper } from '@angular/material';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
 
 @Component({
   selector: 'app-container',
@@ -17,9 +17,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 })
 export class PlanningComponent implements OnInit, OnDestroy {
   selectedIndex: number;
-  actualForm: BehaviorSubject<FormGroup> = new BehaviorSubject(null);
+  steps: Array<Step> = new Array();
+  actualForm$: BehaviorSubject<FormGroup> = new BehaviorSubject(null);
   unsubscribe$ = new Subject();
-  @ViewChild('stepper') stepper: MatStepper;
+  control: FormGroup;
+
+  actualStep = 1;
+  stepsSize;
+
   constructor(
     private planningService: PlanningService,
     private renderer: Renderer,
@@ -28,48 +33,60 @@ export class PlanningComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder
   ) {}
   ngOnInit() {
-    this.initializeStepperEvents();
+    this.initializeStepper();
+    this.initializeFormControl();
   }
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
-  initializeStepperEvents() {
-    this.eventStepChanged();
-    // console.log(this.stepper)
-  }
-  eventStepChanged() {
-    this.stepper.selectionChange.subscribe(( newStep ) => {
-      let actualForm = this.actualForm.getValue();
-      if ( actualForm.invalid ) {
-        console.log("?")
-        console.log(newStep)
-
-        //this.stepper.previous()
-        // newStep.selectedIndex = newStep.previouslySelectedIndex;
-        // newStep.selectedStep = newStep.previouslySelectedStep;
+  initializeFormControl() {
+    this.actualForm$.subscribe(( form: FormGroup ) => {
+      if ( form )  {
+        form.statusChanges.subscribe(( status ) => {
+          console.log(status);
+          if ( status === 'VALID' ) {
+            
+          }
+        })
       }
     })
   }
+  initializeStepper() {
+    this.steps.push( new Step('Procurar equipamentos', StepState.ACTUAL) );
+    this.steps.push( new Step('Realizar manobras', StepState.NOT_ACTIVATED) );
+    this.steps.push( new Step('Simular e salvar', StepState.NOT_ACTIVATED) );
+    this.stepsSize = this.steps.length;
+    this.initializeStepperEvents();
+  }
+  initializeStepperEvents() {
+    this.eventStepChanged();
+    this.control = this.formBuilder.group({
+      actualFormDone: ['', Validators.required]
+    });
+  }
+  eventStepChanged() {
+  }
 
   setActualForm( form ) {
-    let actualForm = this.actualForm.getValue();
+    let actualForm = this.actualForm$.getValue();
     if ( !actualForm || !actualForm.invalid ) {
-      this.actualForm.next( form );
+      this.actualForm$.next( form );
     }
   }
-  doSomething(event) {
-    console.log(event)
-    return false;
-    // if (this.checkReturn === false) {
-    //     console.log(this.mdStepper.selectedIndex); //index is not yet changed
-    //     //do business logic saving
-    //     //if business logic saving return to previous page
-    //     this.checkReturn = true;
-    //     this.mdStepper.selectedIndex = event.previouslySelectedIndex; //not working because index is still the old index
-    // }
-    // else {
-    //     this.checkReturn = false;
-    // }
 }
+
+enum StepState {
+  NOT_ACTIVATED = -1,
+  ACTUAL = 0,
+  DONE = 1
+}
+
+class Step {
+  name;
+  state;
+  constructor( name, state ) {
+    this.name = name;
+    this.state =  state;
+  }
 }

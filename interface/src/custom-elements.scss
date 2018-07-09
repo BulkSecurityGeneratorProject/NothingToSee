@@ -3,16 +3,23 @@
 
 
 .ui-btn {
+    float: left;
     color: $ui-second-text-color;
-    font-size: 25px;
-    line-height: 25px;
-    width: 50px;
-    height: 50px;
+    font-size: 14px;
+    line-height: 20px;
+    width: 40px;
+    height: 40px;
 }
 
+.ui-btn-text {
+    height: 35px;
+}
 .ui-btn-primary {
-    background: rgba(16, 125, 242, 0.816);
-    color: $ui-second-border-color
+    background: rgba(16, 125, 242, 0.816) !important;
+    color: $ui-second-border-color;
+    border-radius: 0px;
+    padding: 0px;
+    margin: 0px;
 }
 
 .ui-btn-primary:hover {
@@ -28,9 +35,6 @@
     background: $ui-tertiary-color;
 }
 
-.ui-btn:hover {
-    background: rgba(0, 0, 0, 0.1)
-}
 
 .ui-select {
     outline: none;
@@ -78,6 +82,9 @@
     height: 40px;
     font-size: 12px;
 }
+.ui-progress-bar > rect {
+    color: $ui-primary-color;
+}
 .mat-step-header .mat-step-icon { 
     background-color: $ui-primary-color;
 }
@@ -89,10 +96,13 @@
     color: $ui-primary-color;
 }
 
-.mat-horizontal-stepper-header{
-    pointer-events: none !important;
-    cursor: pointer;
-}
+// .mat-horizontal-stepper-header{
+//     pointer-events: none !important;
+//     cursor: pointer;
+// }
+// .mat-horizontal-content-container {
+//     padding-bottom: 0px !important;
+// }
 // .mat-step-header {
 //     background-color: red;
 // }

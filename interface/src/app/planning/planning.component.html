@@ -1,21 +1,46 @@
+<div class = "ui-stepper">
+  <!-- <div class = "ui-stepper-header">
+    <div *ngFor = "let step of steps; let i = index"
+    [ngClass]="{
+      'ui-step': true, 
+      'ui-step-not-activated': step.state === -1, 
+      'ui-step-actual': step.state === 0, 
+      'ui-step-done': step.state === 1
+      }">
+      <div class = "ui-step-name">
+        {{i + 1}}  <span>{{ step.name }}</span>
+      </div>
+      <div class = "ui-step-divisor" style="float:right;" *ngIf = "i + 1 !== stepsSize">
+        <span class = "fa fa-chevron-right"></span>
+      </div>
+    </div>
+  </div> -->
+  <div class = "ui-stepper-container">
+    <mat-horizontal-stepper linear #stepper  >
+      <ng-template matStepperIcon="edit">
+          <mat-icon class = "fa fa-check"></mat-icon>
+      </ng-template>
 
-<mat-horizontal-stepper #stepper linear="true" (selectionChange)="doSomething($event)">
-    <ng-template matStepperIcon="edit">
-        <mat-icon class = "fa fa-check"></mat-icon>
-    </ng-template>
-
-    <mat-step [stepControl] = "searchEquipments">
-      <ng-template matStepLabel > Procurar equipamentos </ng-template>
-      <search-equipments></search-equipments>
-    </mat-step>
-    <mat-step [stepControl] = "changeEquipments">
-      <ng-template matStepLabel > Realizar manobras </ng-template>
-      <change-equipments></change-equipments>
-        <!-- <ng-template matStepLabel>Realizar manobras</ng-template> -->
-    </mat-step>
-    <mat-step [stepControl] = "saveEquipmentsChanges">
-      <ng-template matStepLabel > Salvar e simular </ng-template>
-      <save-equipments-changes></save-equipments-changes>
-        <!-- <ng-template matStepLabel > Salvar e simular </ng-template> -->
-    </mat-step>
-</mat-horizontal-stepper>
+      <mat-step [stepControl] = "control">
+        <ng-template matStepLabel > Procurar equipamentos </ng-template>
+        <search-equipments></search-equipments>
+      </mat-step>
+      <mat-step [stepControl] = "changeEquipments">
+        <ng-template matStepLabel > Realizar manobras </ng-template>
+        <change-equipments></change-equipments>
+      </mat-step>
+      <mat-step [stepControl] = "saveEquipmentsChanges">
+        <ng-template matStepLabel > <div>Salvar e simular</div></ng-template>
+        <save-equipments-changes></save-equipments-changes>
+      </mat-step>
+    </mat-horizontal-stepper>
+  </div>
+  <div class = "ui-stepper-navigation">
+      <button mat-button class = "ui-btn ui-btn-reverse" *ngIf = "actualStep !== 1">
+        <span>Voltar</span>
+      </button> 
+      <button mat-button class = "ui-btn ui-btn-primary ui-btn-text" style = "float: right">
+        <span> {{( actualStep < stepsSize ) ? "Continuar" : "Completar"}} </span>
+      </button>
+    </div>
+</div>
