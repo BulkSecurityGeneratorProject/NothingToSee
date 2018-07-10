@@ -3,10 +3,24 @@
     Manobra
   </div>
   <div class = "ui-nav-bar-user">
-    <div class = "ui-nav-bar-user-photo" *ngIf = "havePhoto()">
+    <div class = "ui-nav-bar-user-photo" [matMenuTriggerFor]="menu">
+      <span *ngIf = "!havePhoto()" class = "fa fa-user-circle" ></span>
     </div>
-    <div class = "ui-nav-bar-user-photo" *ngIf = "!havePhoto()">
-      <span class = "fa fa-user-circle"></span>
+    <div class = "ui-nav-bar-user-menu">
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>
+          <mat-icon>dialpad</mat-icon>
+          <span>Redial</span>
+        </button>
+        <button mat-menu-item disabled>
+          <mat-icon>voicemail</mat-icon>
+          <span>Check voicemail</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>notifications_off</mat-icon>
+          <span>Disable alerts</span>
+        </button>
+      </mat-menu>
     </div>
   </div>
 </mat-toolbar>

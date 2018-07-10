@@ -1,6 +1,6 @@
 import { MatStepperModule, MatFormFieldModule, MatInputModule, MatIconModule, MatBadgeModule,
 MatIconRegistry, MatToolbarModule, MatSidenavModule, MatButtonModule, MatButtonToggleModule,
-MatSelectModule, MatProgressBarModule} from '@angular/material'
+MatSelectModule, MatProgressBarModule, MatMenuModule} from '@angular/material'
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -19,7 +19,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     ReactiveFormsModule,
     MatSelectModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatMenuModule
   ],
   exports: [
     MatStepperModule,
@@ -35,7 +36,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     ReactiveFormsModule,
     MatSelectModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatMenuModule
   ]
 })
 export class CustomMaterialModule {

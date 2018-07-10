@@ -15,7 +15,14 @@
     height: 35px;
 }
 .ui-btn-primary {
-    background: rgba(16, 125, 242, 0.816) !important;
+    background: $ui-primary-color !important;
+    color: $ui-second-border-color;
+    border-radius: 0px;
+    padding: 0px;
+    margin: 0px;
+}
+.ui-btn-tertiary {
+    background: $ui-tertiary-color !important;
     color: $ui-second-border-color;
     border-radius: 0px;
     padding: 0px;

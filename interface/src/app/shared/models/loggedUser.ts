@@ -1,8 +1,8 @@
 export class LoggedUser {
     token;
-    userName;
-    constructor( token, userName ) {
+    username;
+    constructor( username, token ) {
         this.token = token;
-        this.userName = userName;
+        this.username = username;
     }
 }

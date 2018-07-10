@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
-import { Constraints } from './constraints';
 import { BehaviorSubject } from 'rxjs';
 import { LoggedUser } from '../shared/models/loggedUser';
  
@@ -10,15 +9,21 @@ export class AuthenticationService {
     logged$: BehaviorSubject<LoggedUser> = new BehaviorSubject( null );
     constructor(private http: HttpClient) {}
 
-    login(username: string, password: string) {
-        return this.http.post<any>(Constraints.BASE_URL + '/authenticate', { username: username, password: password })
-            .pipe(map(( res:any ) => {
-                if (res && res.token) {
-                    let loggedUser = new LoggedUser( res.token, username );
-                    this.logged$.next( loggedUser );
+    createLoggedUser( name, token ) {
+        const loggedUser = new LoggedUser( name, token );
+        this.logged$.next( loggedUser );
+        return loggedUser;
+    }
+    login(userForm) {
+        return this.http.post<any>('/api/authenticate', { username: userForm.username, password: userForm.password })
+            .pipe(map(( response ) => {
+                if ( response.id_token ) {
+                    const loggedUser = this.createLoggedUser( userForm.username, response.id_token );
                     localStorage.setItem('currentUser', JSON.stringify( loggedUser ));
+                    return true;
                 }
             }));
+            
     }
     logout() {
         localStorage.removeItem('currentUser');

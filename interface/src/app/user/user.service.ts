@@ -6,20 +6,19 @@ import { AuthenticationService } from '../api/authentication.service';
 import { LoggedUser } from '../shared/models/loggedUser';
  
 @Injectable({ providedIn: 'root' })
-export class UserService implements OnInit, OnDestroy {
+export class UserService {
     currentUser$: BehaviorSubject<User> = new BehaviorSubject( null );
     unsubscribe$ = new Subject();
-    constructor(private http: HttpClient, private authenticationService: AuthenticationService) {}
-    
-    ngOnInit() {
-        this.authenticationService.logged$.subscribe(( loggedUser: LoggedUser ) => {
-            this.getUser( loggedUser.userName );
-        })
+    constructor(private http: HttpClient, private authenticationService: AuthenticationService) {
+        this.initializeUser();
     }
-    
-    ngOnDestroy() {
-        this.unsubscribe$.next();
-        this.unsubscribe$.complete();
+
+    initializeUser() {
+        this.authenticationService.logged$.subscribe(( loggedUser: LoggedUser ) => {
+            if ( loggedUser ) {
+                this.getUser( loggedUser.username ).subscribe( this.currentUser$ );
+            }
+        })
     }
 
     getAll() {
@@ -27,7 +26,7 @@ export class UserService implements OnInit, OnDestroy {
     }
 
     getUser( userName ) {
-        return this.http.get<User>('/api/user', { params: { userName: userName }});
+        return this.http.get<User>('/api/users/' + userName);
     }
 
     setCurrentUser( user, ) {
