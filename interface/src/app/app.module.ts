@@ -4,19 +4,20 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AppRoutingModule } from 'src/app/app.routing.module';
-import { CustomMaterialModule } from 'src/app/shared/material/custom-material.module';
-import { SideBarComponent } from 'src/app/side-bar/side-bar.component';
-import { PlanningModule } from 'src/app/planning/planning.module';
+import { AppRoutingModule } from './app.routing.module';
+import { CustomMaterialModule } from './shared/material/custom-material.module';
+import { SideBarComponent } from './side-bar/side-bar.component';
+import { PlanningModule } from './planning/planning.module';
+import { ApiModule } from './api/api.module';
+import { LoginComponent } from './login/login.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     NavBarComponent,
-    SideBarComponent
+    SideBarComponent,
+    LoginComponent
   ],
   imports: [
     AppRoutingModule,
@@ -24,6 +25,7 @@ import { PlanningModule } from 'src/app/planning/planning.module';
     HttpClientModule,
     CustomMaterialModule,
     PlanningModule,
+    ApiModule
   ],
   providers: [],
   bootstrap: [AppComponent]

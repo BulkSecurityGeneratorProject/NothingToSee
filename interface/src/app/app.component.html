@@ -1,9 +1,9 @@
-<div class = "ui-nav">
+<div class = "ui-nav" *ngIf = "user">
     <app-nav-bar></app-nav-bar>
 </div>
-<div class = "ui-side">
+<div class = "ui-side" *ngIf = "user">
     <app-side-bar></app-side-bar>
 </div>
-<div class = "ui-container">
+<div [ngClass] = "{'ui-container': user, 'ui-container-full': !user}">
     <router-outlet></router-outlet>
 </div>

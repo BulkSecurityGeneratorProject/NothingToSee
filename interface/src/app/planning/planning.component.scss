@@ -8,7 +8,7 @@
 .ui-stepper-container {
     float: left;
     width: 100%;
-    overflow-y: auto;
+    min-height: 150px;
 }
 .ui-stepper-navigation {
     float: left;
@@ -19,10 +19,9 @@
 .ui-stepper-form {
     display: flex;
     height: calc(100vh - 300px);
-    min-height: 100px;
+    min-height: 130px;
     align-content: center;
     align-items: center;
-    margin: auto;
 }
 .ui-stepper-form form {
     margin: auto;

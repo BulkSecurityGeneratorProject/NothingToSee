@@ -1,0 +1,50 @@
+@import "../app.component.scss";
+.ui-login {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    color: $ui-primary-text-color;
+    padding-bottom: 40px;
+}
+
+.ui-login-container {
+    margin: auto;
+    padding: 20px;
+}
+
+.ui-login-header {
+    text-align: center;
+    padding-bottom: 40px;
+    font-size: 20px;
+}
+.ui-login-body {
+    display: flex;
+    align-content: center;
+    align-items: center;
+}
+.ui-login-field {
+    display: block;
+    color: white !important;
+}
+.ui-login-body-info {
+    text-align: center;
+    padding-top: 30px;
+}
+.ui-login-user-icon {
+    font-size: 70px;
+    display: block;
+}
+
+.ui-login-password-forgot {
+    display: block;
+    font-size: 14px;
+    margin-top: 30px;
+    cursor: pointer;
+}
+
+.ui-btn-login {
+    margin-left: 40px;
+    margin-top: 40px;
+}

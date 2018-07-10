@@ -3,6 +3,8 @@
     float: left;
     width: 100%;
     height: 50px;
+    background: $ui-nav-bar-primary-color;
+    box-shadow: 0px 0px 15px 2px $ui-side-bar-primary-color;
 }
 
 .ui-container {
@@ -11,8 +13,18 @@
     padding: 20px;
     overflow-y: auto;
 }
+
+.ui-container-full {
+    float: left;
+    height: 100%;
+    width: 100%;
+    background: $ui-second-color;
+}
+
 .ui-side {
     float: left;
+    background: $ui-side-bar-primary-color;
+    border-right: 1px solid $ui-primary-border-color;
 }
 @media(max-width: 800px) {
     .ui-side {

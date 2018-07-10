@@ -1,0 +1,27 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "accenture"
+    },
+    "jhipsterVersion": "5.0.2",
+    "applicationType": "monolith",
+    "baseName": "manobra",
+    "packageName": "accenture",
+    "packageFolder": "accenture",
+    "serverPort": "8090",
+    "authenticationType": "jwt",
+    "cacheProvider": "hazelcast",
+    "enableHibernateCache": true,
+    "websocket": "spring-websocket",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "prodDatabaseType": "oracle",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": "eureka",
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "19ee1a4e349841da09c361c55cf0b0865a045f5e",
+    "enableTranslation": false
+  }
+}

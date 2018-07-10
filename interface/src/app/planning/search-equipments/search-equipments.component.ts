@@ -4,7 +4,7 @@ import { Subject } from 'rxjs/internal/Subject';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { MatStepper } from '@angular/material';
 import { PlanningService } from '../planning.service'
-import { PlanningComponent } from 'src/app/planning/planning.component';
+import { PlanningComponent } from '../planning.component';
 
 @Component({
   selector: 'search-equipments',
@@ -47,6 +47,5 @@ export class SearchEquipmentsComponent implements OnInit, OnDestroy {
       at: ['', Validators.required]
     });
   }
-
   navigate() {}
 }

@@ -10,11 +10,9 @@
     padding: 0px;
     padding-left: 30px;
     padding-right: 30px;
-    background: $ui-primary-color;
     color: $ui-primary-text-color;
     line-height: 50px;
-    box-shadow: 0px 0px 15px 2px $side-bar-primary-color;
-    z-index: 2;
+    background: none;
 }
 .ui-nav-bar-system-name {
     float: left;

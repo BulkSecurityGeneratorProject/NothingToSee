@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { ExecutionDiary } from '../shared/dto/execution-diary';
+import { ExecutionDiary } from '../shared/models/execution-diary';
 import { Observable } from 'rxjs/internal/Observable';
-import { Equipment } from  '../shared/dto/Equipment';
-import { Board } from '../shared/dto/board';
+import { Equipment } from  '../shared/models/equipment';
+import { Board } from '../shared/models/board';
 
 @Injectable({
   providedIn: 'root',

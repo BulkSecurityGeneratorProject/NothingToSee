@@ -1,0 +1,26 @@
+<div class = "ui-login">
+    <div class = "ui-login-container">
+        <div class = "ui-login-header">
+            Bem vindo ao Manobra
+        </div>
+        <div class = "ui-login-body">
+            <div class = "ui-login-body-info">
+                <span class = "fa fa-user-circle ui-login-user-icon"></span><br><br>
+                <span class = "ui-login-password-forgot">Esqueceu sua senha ?</span>
+            </div>
+            <div class = "ui-login-body-form">
+                <form [formGroup] = "login">
+                    <mat-form-field class = "ui-login-field">
+                        <input matInput placeholder="nome do usuário" formControlName="userName" required>
+                    </mat-form-field>
+                    <mat-form-field class = "ui-login-field">
+                        <input matInput placeholder="senha" formControlName="password" required>
+                    </mat-form-field>
+                    <button mat-button class = "ui-btn ui-btn-primary ui-btn-text ui-btn-login" >
+                        <span> Entrar </span>   
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

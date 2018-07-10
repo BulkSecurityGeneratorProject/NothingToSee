@@ -1,17 +1,24 @@
 $ui-primary-color: rgb(55, 112, 255);
-$ui-second-color: rgb(111, 112, 116);
+$ui-second-color: rgba(0, 0, 0, 0.8);
 $ui-tertiary-color: rgb(4, 201, 83);
 
 $ui-primary-text-color: rgb(255, 255, 255);
 $ui-second-text-color: rgb(119, 118, 118);
-$ui-primary-border-color: rgb(230, 230, 230);
+$ui-primary-border-color: rgb(243, 243, 243);
 $ui-second-border-color: rgb(255, 255, 255);
+
+/*
+    Nav Bar
+*/
+
+$ui-nav-bar-primary-color: $ui-primary-color;
+$ui-nav-bar-second-color: $ui-primary-color;
 
 /*
     Side Bar
 */
-$side-bar-primary-color: rgba(0, 0, 0, 0.8);
-$side-bar-second-color: $ui-primary-color;
+$ui-side-bar-primary-color: $ui-second-color;
+$ui-side-bar-second-color: $ui-primary-color;
 $ui-side-bar-option-selected: $ui-primary-color;
 $ui-side-bar-option-selected-text: rgb(245, 245, 245);
 $ui-side-bar-second-text-color: rgb(189, 188, 188);
