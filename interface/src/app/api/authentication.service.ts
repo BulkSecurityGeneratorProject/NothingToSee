@@ -11,6 +11,8 @@ export class AuthenticationService {
 
     createLoggedUser( name, token ) {
         const loggedUser = new LoggedUser( name, token );
+       
+        localStorage.setItem('currentUser', JSON.stringify( loggedUser ));
         this.logged$.next( loggedUser );
         return loggedUser;
     }
@@ -18,14 +20,13 @@ export class AuthenticationService {
         return this.http.post<any>('/api/authenticate', { username: userForm.username, password: userForm.password })
             .pipe(map(( response ) => {
                 if ( response.id_token ) {
-                    const loggedUser = this.createLoggedUser( userForm.username, response.id_token );
-                    localStorage.setItem('currentUser', JSON.stringify( loggedUser ));
-                    return true;
+                    return this.createLoggedUser( userForm.username, response.id_token );
                 }
             }));
             
     }
     logout() {
         localStorage.removeItem('currentUser');
+        this.logged$.next( null );
     }
 }

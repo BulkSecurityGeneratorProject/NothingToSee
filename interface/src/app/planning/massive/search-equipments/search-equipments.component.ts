@@ -3,8 +3,8 @@ import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Subject } from 'rxjs/internal/Subject';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { MatStepper } from '@angular/material';
-import { PlanningService } from '../planning.service'
-import { PlanningComponent } from '../planning.component';
+import { PlanningService } from '../../planning.service'
+import { PlanningComponent } from '../../planning.component';
 
 @Component({
   selector: 'search-equipments',
@@ -21,13 +21,12 @@ export class SearchEquipmentsComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
-    @Optional() public planningComponent: PlanningComponent
   ) {}
 
   ngOnInit() {
     this.initializeDiaries();
     this.initializeForms();
-    this.planningComponent.setActualForm( this.searchEquipments );
+    // this.planningComponent.setActualForm( this.searchEquipments );
   }
 
   ngOnDestroy(): void {
@@ -36,9 +35,9 @@ export class SearchEquipmentsComponent implements OnInit, OnDestroy {
   }
 
   initializeDiaries() {
-    this.planningService.getExecutionDiaries().subscribe(( executionDiaries ) =>  {
-      this.executionDiaries = executionDiaries;
-    });
+    // this.planningService.getExecutionDiaries().subscribe(( executionDiaries ) =>  {
+    //   this.executionDiaries = executionDiaries;
+    // });
   }
   initializeForms() {
     this.searchEquipments = this.formBuilder.group({

@@ -19,8 +19,8 @@ export class AppComponent implements OnInit {
     if ( currentUser ) {
       this.authService.createLoggedUser( currentUser.username, currentUser.token );
     } 
-    this.userService.currentUser$.subscribe(( user ) => {
-      if ( user ) {
+    this.userService.loggedIn$.subscribe(( isLogged ) => {
+      if ( isLogged ) {
         this.hasUser = 1;
       } else {
         this.hasUser = 0;

@@ -24,6 +24,10 @@ export class NavBarComponent implements OnInit, OnDestroy {
     this.unsubscribe$.complete();
   }
 
+  doLogout() {
+    this.userService.logout();
+  }
+
   havePhoto() {
     return false;
   }

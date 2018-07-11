@@ -3,7 +3,7 @@ import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Subject } from 'rxjs/internal/Subject';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { MatStepper } from '@angular/material';
-import { PlanningService } from '../planning.service'
+import { PlanningService } from '../../planning.service'
 
 @Component({
   selector: 'change-equipments',

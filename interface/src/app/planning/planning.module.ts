@@ -1,21 +1,26 @@
 import { NgModule } from '@angular/core';
 import { PlanningComponent } from './planning.component';
-import { SearchEquipmentsComponent } from './search-equipments/search-equipments.component';
-import { ChangeEquipmentsComponent } from './change-equipments/change-equipments.component';
-import { SaveEquipmentsChangesComponent } from './save-equipments-changes/save-equipments-changes.component';
 import { CustomMaterialModule } from '../shared/material/custom-material.module';
-import {MatInputModule} from '@angular/material'
+import { MatInputModule } from '@angular/material'
+import { DynamicDirective } from '../shared/directive/dynamic.directive';
+import * as DynamicForms from './index';
+
+const dynamics = [];
+let keys = Object.keys(DynamicForms);
+for ( let key of keys ) {
+  dynamics.push( DynamicForms[key] );
+}
 
 @NgModule({
-  declarations:[
-    PlanningComponent,
-    SearchEquipmentsComponent,
-    ChangeEquipmentsComponent,
-    SaveEquipmentsChangesComponent
-  ],
+  declarations: [PlanningComponent, 
+    DynamicDirective, ...dynamics],
   imports: [
     CustomMaterialModule,
     MatInputModule
-  ]
+    
+  ],
+  entryComponents: dynamics
 })
-export class PlanningModule {}
+export class PlanningModule { 
+  constructor() {}
+}

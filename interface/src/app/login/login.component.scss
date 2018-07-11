@@ -25,8 +25,9 @@
     align-items: center;
 }
 .ui-login-field {
+    float: none;
     display: block;
-    color: white !important;
+    margin-top: 10px;
 }
 .ui-login-body-info {
     text-align: center;

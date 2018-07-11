@@ -12,19 +12,20 @@
     height: calc(100% - 50px);
     padding: 20px;
     overflow-y: auto;
+    background: $ui-container-primary-color;
 }
 
 .ui-container-full {
     float: left;
     height: 100%;
     width: 100%;
-    background: $ui-second-color;
+    background: $ui-login-primary-color;
 }
 
 .ui-side {
     float: left;
     background: $ui-side-bar-primary-color;
-    border-right: 1px solid $ui-primary-border-color;
+    border-right: 1px solid $ui-side-bar-border-color;
 }
 @media(max-width: 800px) {
     .ui-side {

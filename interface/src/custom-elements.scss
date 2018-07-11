@@ -7,41 +7,41 @@
     color: $ui-second-text-color;
     font-size: 14px;
     line-height: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    height: 40px;
+}
+.mat-button, 
+.mat-flat-button, 
+.mat-icon-button, 
+.mat-stroked-button {
+    min-width: 40px;
+    min-height: 40px;
+}
+.ui-btn-radius {
+    color: white;
+    text-align: center;
     width: 40px;
     height: 40px;
+    margin-top:5px;
+    border-radius: 25px;
+    padding: 0px;
 }
 
 .ui-btn-text {
     height: 35px;
 }
 .ui-btn-primary {
-    background: $ui-primary-color !important;
-    color: $ui-second-border-color;
+    background: $ui-btn-primary-color;
+    color: $ui-btn-primary-text-color;
     border-radius: 0px;
-    padding: 0px;
-    margin: 0px;
-}
-.ui-btn-tertiary {
-    background: $ui-tertiary-color !important;
-    color: $ui-second-border-color;
-    border-radius: 0px;
-    padding: 0px;
+    border: 1px solid $ui-btn-primary-border !important;
     margin: 0px;
 }
 
 .ui-btn-primary:hover {
-    background: rgb(16, 125, 242) !important;
+    background: $ui-btn-primary-hover-color;
 }
-
-.ui-btn-next {
-    background: $ui-tertiary-color;
-    color: $ui-second-border-color
-}
-
-.ui-btn-next:hover {
-    background: $ui-tertiary-color;
-}
-
 
 .ui-select {
     outline: none;
@@ -75,7 +75,6 @@
     Overriding materal css
 
 */
-
 .ui-stepper-container {
     float: left;
     display: block;
@@ -86,46 +85,67 @@
 .ui-form-field {
     float: left;
     margin-left: 20px;
-    height: 40px;
+    height: 50px;
     font-size: 12px;
 }
-.ui-progress-bar > rect {
-    color: $ui-primary-color;
+/*
+    Dropdown
+*/
+.mat-primary .mat-option.mat-selected:not(.mat-option-disabled) { 
+    color: $ui-dropdown-text-color;
 }
-.mat-step-header .mat-step-icon { 
-    background-color: $ui-primary-color;
-}
-
+/*
+    Input e select
+*/
 .mat-form-field.mat-focused .mat-form-field-ripple {
     background-color: $ui-primary-color;
 }
 .mat-form-field.mat-focused .mat-form-field-label {
     color: $ui-primary-color;
+    font-size: 14px;
 }
-
 .mat-form-field-appearance-legacy .mat-form-field-label {
-    color: $ui-tertiary-color;    
-    text-align: center;
+    color: $ui-primary-color;
+    font-size: 14px;
+    margin-top: 2px;
+    // text-align: center;
+}
+.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label { 
+    transform: translateY(-1.34375em) scale(.95) !important;
+}
+.mat-form-field-flex {
+    height: 50px;
+}
+.mat-input-element {
+    margin-top:10px;
+    font-size: 14px;
+}
+.mat-select {
+    margin-top:10px;
+}
+.mat-select-value {
+    font-size: 14px;
+}
+.mat-form-field-appearance-legacy .mat-form-field-underline {
+    background-color: $ui-input-underline-color;
 }
 
-// .mat-horizontal-stepper-header{
-//     pointer-events: none !important;
-//     cursor: pointer;
-// }
-// .mat-horizontal-content-container {
-//     padding-bottom: 0px !important;
-// }
-// .mat-step-header {
-//     background-color: red;
-// }
-// .mat-step-header:hover {
-//     background-color: red;
-// }
-
-
-// .mat-stepper-horizontal-line {
-//     display: none;
-// }
-// .mat-step-icon-not-touched {
-    
-// }
+/* Stepper */
+.mat-step-header .mat-step-icon { 
+    background-color: $ui-stepper-header-color;
+}
+.mat-stepper-horizontal, .mat-stepper-vertical {
+    background: $ui-stepper-background-color;
+}
+.mat-step-header .mat-step-label.mat-step-label-active {
+    color: $ui-stepper-label-text-color;
+}
+.mat-step-header .mat-step-label {
+    color: $ui-stepper-label-non-active-text-color
+}
+.mat-stepper-horizontal-line {
+    border-top-color: $ui-stepper-label-divisor-color;
+}
+.mat-step-header .mat-step-icon-not-touched {
+    background-color: $ui-stepper-non-active-header-color;
+}

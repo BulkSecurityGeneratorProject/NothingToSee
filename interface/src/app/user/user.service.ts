@@ -4,12 +4,18 @@ import { User } from '../shared/models/user';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { AuthenticationService } from '../api/authentication.service';
 import { LoggedUser } from '../shared/models/loggedUser';
+import { ActivatedRoute, Router } from '@angular/router';
  
 @Injectable({ providedIn: 'root' })
 export class UserService {
+    loggedIn$: BehaviorSubject<boolean> = new BehaviorSubject( false );
     currentUser$: BehaviorSubject<User> = new BehaviorSubject( null );
     unsubscribe$ = new Subject();
-    constructor(private http: HttpClient, private authenticationService: AuthenticationService) {
+    constructor(
+        private http: HttpClient, 
+        private authenticationService: AuthenticationService,
+        private router: Router
+    ) {
         this.initializeUser();
     }
 
@@ -17,6 +23,9 @@ export class UserService {
         this.authenticationService.logged$.subscribe(( loggedUser: LoggedUser ) => {
             if ( loggedUser ) {
                 this.getUser( loggedUser.username ).subscribe( this.currentUser$ );
+                this.loggedIn$.next( true );
+            } else {
+                this.loggedIn$.next( false );
             }
         })
     }
@@ -31,5 +40,10 @@ export class UserService {
 
     setCurrentUser( user, ) {
         localStorage.currentUser = user;
+    }
+
+    logout() {
+        this.authenticationService.logout();
+        this.router.navigate(['login']);
     }
 }
