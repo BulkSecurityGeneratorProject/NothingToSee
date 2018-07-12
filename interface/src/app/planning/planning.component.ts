@@ -1,107 +1,74 @@
-import { Component, OnInit, Renderer, OnDestroy, Input, ViewChild, ComponentFactoryResolver,
-   ChangeDetectionStrategy,  
-   AfterViewInit} from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { PlanningService } from './planning.service';
+import { Component, OnInit, OnDestroy, ViewChild, ComponentFactoryResolver, AfterContentInit} from '@angular/core';
 import { Subject } from 'rxjs/internal/Subject';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
 import { DynamicDirective } from '../shared/directive/dynamic.directive';
-import { Step } from '../shared/models/stepper';
-import { MassiveComponent } from './index';
+import { Step } from '../shared/models/step';
+import { MassiveComponent } from '.';
+import { MatStepper } from '@angular/material';
+import { FormGroup } from '../../../node_modules/@angular/forms';
+import { Subscription } from '../../../node_modules/rxjs';
 
 @Component({
   selector: 'app-container',
   templateUrl: './planning.component.html',
   styleUrls: ['./planning.component.scss']
 })
-export class PlanningComponent implements OnInit, OnDestroy, AfterViewInit {
+export class PlanningComponent implements OnInit, OnDestroy, AfterContentInit {
   @ViewChild(DynamicDirective) dynamicHost: DynamicDirective;
-  
-  steps: Array<Step> = null;
+  @ViewChild('stepper') stepper: MatStepper;
   states: Array<any> = [];
   unsubscribe$ = new Subject();
   control: FormGroup;
-  actualStep = 0;
-  stepsSize;
+  
+  actualStep$: BehaviorSubject<Step> = new BehaviorSubject(null);
+  eventSave$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  formEvaluation$: BehaviorSubject<number> = new BehaviorSubject(-1);
+  ready$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  steps: Array<Step> = []
 
-  constructor(
-    private planningService: PlanningService,
-    private renderer: Renderer,
-    private router: Router,
-    private route: ActivatedRoute,
-    private formBuilder: FormBuilder,
-    private componentFactoryResolver: ComponentFactoryResolver
-  ) {}
-  ngOnInit() { 
-    this.initializeStates();
-    this.loadComponent( this.states[0] )
-  }
-  ngAfterViewInit() {
+  constructor ( private componentFactoryResolver: ComponentFactoryResolver ) {}
+  ngAfterContentInit() {
     setTimeout(() => {
-      this.initializeSteps();
+      this.ready$.next(true);
     }, 100)
   }
-  initializeSteps() {
-    this.planningService.steps$.subscribe(( steps ) => {
-      if ( steps ) {
-        this.steps = steps;
-        this.actualStep = 0;
-        this.planningService.step$.next( this.actualStep );
-        this.stepsSize = this.steps.length;
-        this.startFormControl();
+  ngOnInit() { 
+    this.initializeStates();
+    this.initializeFormEvaluations()
+    // Para ser uma rota
+    this.loadComponent( this.states[0] )
+  }
+  initializeStates() {
+    this.states.push( MassiveComponent )
+  }
+  initializeFormEvaluations() {
+    this.formEvaluation$.subscribe(( evaluated ) => {
+      if ( evaluated === 1) {
+        console.log("//")
+        let actualStep = this.actualStep$.getValue();
+        this.actualStep$.next(this.steps[ actualStep.number + 1 ]);
+        this.stepper.next();
+        this.formEvaluation$.next(-1);
       }
-    }) 
+    })
+  }
+  eventBackward() {
+    this.stepper.previous();
+    let actualStep = this.actualStep$.getValue();
+    this.actualStep$.next(this.steps[ actualStep.number - 1 ]);
+  }
+  eventForward() {
+    this.eventSave$.next(true);
   }
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
-  initializeStates() {
-    this.states.push( MassiveComponent )
-  }
   loadComponent( state ) {
     let componentFactory = this.componentFactoryResolver.resolveComponentFactory(state);
     let viewContainerRef = this.dynamicHost.viewContainerRef;
     viewContainerRef.clear();
-    viewContainerRef.createComponent(componentFactory);
+    let instance = viewContainerRef.createComponent(componentFactory).instance;
+    instance['planningComponent'] = this;
   }
-  startFormControl() {
-    this.control = this.formBuilder.group({
-      actualFormDone: ['', Validators.required]
-    });
-  }
-  // initializeFormControl() {
-  //   this.actualForm$.subscribe(( form: FormGroup ) => {
-  //     if ( form )  {
-  //       form.statusChanges.subscribe(( status ) => {
-  //         if ( status === 'VALID' ) {
-  //             // TODO
-  //         }
-  //       })
-  //     }
-  //   })
-  // }
-  // initializeStepper() {
-  //   this.stepsSize = this.steps.length;
-  //   this.initializeStepperEvents();
-  // }
-  // initializeStepperEvents() {
-  //   this.eventStepChanged();
-  
-  // }
-  // eventStepChanged() {
-  // }
-  
-  // setStep( number ) {
-  //   const step = this.steps[number - 1];
-  //   this.actualStep = number;
-  //   this.loadComponent( step );
-  // }
-  // setActualForm( form ) {
-  //   let actualForm = this.actualForm$.getValue();
-  //   if ( !actualForm || !actualForm.invalid ) {
-  //     this.actualForm$.next( form );
-  //   }
-  // }
 }

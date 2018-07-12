@@ -1,9 +1,10 @@
-import { Component, OnInit, OnDestroy, ViewChild, Optional } from '@angular/core';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs/internal/Subject';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-import { MatStepper } from '@angular/material';
 import { PlanningService } from '../../planning.service'
+import { BehaviorSubject } from 'rxjs';
+import { State } from '../../state';
 import { PlanningComponent } from '../../planning.component';
 
 @Component({
@@ -11,33 +12,33 @@ import { PlanningComponent } from '../../planning.component';
   templateUrl: './search-equipments.component.html',
   styleUrls: ['./search-equipments.component.scss']
 })
-export class SearchEquipmentsComponent implements OnInit, OnDestroy {
-  searchEquipments: FormGroup;
-  executionDiaries = [];
-  @ViewChild('stepper') stepper: MatStepper;
+export class SearchEquipmentsComponent implements OnInit, OnDestroy, AfterViewInit {
+  /*
+    the State.planningComponent will be inject by the parent(PlanningComponent)
+    see in 
+  */
+  state: State;
   unsubscribe$ = new Subject();
-  constructor(
-    private planningService: PlanningService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private formBuilder: FormBuilder,
-  ) {}
+  searchEquipments: FormGroup;
+  
+  executionDiaries = [];
 
-  ngOnInit() {
-    this.initializeDiaries();
-    this.initializeForms();
-    // this.planningComponent.setActualForm( this.searchEquipments );
+  constructor( private formBuilder: FormBuilder ) {}
+
+  ngAfterViewInit() {
+    this.state.ready$.subscribe((ready) => {
+      if ( ready  ) {
+        this.state.setForm( this.searchEquipments );
+      }
+    })
   }
-
+  ngOnInit() {
+    this.initializeForms();
+    this.initializeEventSave();
+  }
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
-  }
-
-  initializeDiaries() {
-    // this.planningService.getExecutionDiaries().subscribe(( executionDiaries ) =>  {
-    //   this.executionDiaries = executionDiaries;
-    // });
   }
   initializeForms() {
     this.searchEquipments = this.formBuilder.group({
@@ -46,5 +47,17 @@ export class SearchEquipmentsComponent implements OnInit, OnDestroy {
       at: ['', Validators.required]
     });
   }
-  navigate() {}
+  initializeEventSave() {
+    this.state.planningComponent.eventSave$.subscribe(( save ) => {
+      if ( save ) {
+        this.validateForm();
+        this.state.planningComponent.eventSave$.next(false);
+      }
+    })
+  }
+  validateForm() {
+    if ( this.searchEquipments.valid ) {
+      this.state.planningComponent.formEvaluation$.next(1);
+    }
+  }
 }

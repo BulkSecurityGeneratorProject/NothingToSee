@@ -4,16 +4,20 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 // import { Observable } from 'rxjs/internal/Observable';
 // import { Equipment } from  '../shared/models/equipment';
 // import { Board } from '../shared/models/board';
-import { BehaviorSubject } from '../../../node_modules/rxjs';
-import { Step } from '../shared/models/stepper';
+import { BehaviorSubject } from 'rxjs';
+import { Step } from '../shared/models/step';
+import { FormGroup } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PlanningService {
-    // API = '/api'
-    step$: BehaviorSubject<number> = new BehaviorSubject(null);
+    step$: BehaviorSubject<Step> = new BehaviorSubject(null);
     steps$: BehaviorSubject<Array<Step>> = new BehaviorSubject(null);
+    
+    doSave$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    doNext$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
     constructor( private http: HttpClient) {}
     // getExecutionDiaries() {
     //     const executionDiaries = new Set();

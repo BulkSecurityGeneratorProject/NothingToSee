@@ -3,7 +3,7 @@ import { PlanningComponent } from './planning.component';
 import { CustomMaterialModule } from '../shared/material/custom-material.module';
 import { MatInputModule } from '@angular/material'
 import { DynamicDirective } from '../shared/directive/dynamic.directive';
-import * as DynamicForms from './index';
+import * as DynamicForms from '.';
 
 const dynamics = [];
 let keys = Object.keys(DynamicForms);
