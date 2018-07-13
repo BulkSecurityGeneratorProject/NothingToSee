@@ -1,1 +1,18 @@
-<ng-template dynamic-host></ng-template>    
+<mat-horizontal-stepper linear #stepper>
+    <ng-template matStepperIcon="edit">
+        <div class = "ui-stepper-icon">
+            <mat-icon class = "fa fa-check"></mat-icon>
+        </div>
+    </ng-template>
+    <mat-step [label] = "step.name" #matStep [completed] = "isCompleted(step.number)" *ngFor = "let step of steps">
+    </mat-step>
+</mat-horizontal-stepper>
+<ng-template dynamic-host></ng-template>
+<div class = "ui-stepper-navigation">
+    <button mat-button class = "ui-btn ui-btn-reverse" *ngIf = "step?.number !== 0" (click) = "eventBackward()">
+        <span>Voltar</span>
+    </button> 
+    <button mat-button class = "ui-btn ui-btn-primary ui-btn-text" style = "float: right" (click) = "eventForward()">
+        <span> {{( step?.number < steps.length - 1 ) ? "Continuar" : "Completar"}} </span>
+    </button>
+</div>

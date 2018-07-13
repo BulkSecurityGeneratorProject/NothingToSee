@@ -7,7 +7,15 @@ import { LoginComponent } from './login/login.component';
 
 const appRoutes: Routes = [
     { path: '', redirectTo: '/planning', pathMatch: 'full', canActivate: [AuthGuard] },
-    { path: 'planning', component: PlanningComponent, canActivate: [AuthGuard] },
+    { path: 'planning', component: PlanningComponent, canActivate: [AuthGuard], children: [
+      {
+        path: 'home',
+        component: PlanningComponent
+      }, {
+        path: '**',
+        component: PlanningComponent
+      }]
+    },
     { path: 'login', component: LoginComponent },
     { path: '**', redirectTo: '' }
 ];

@@ -1,63 +1,42 @@
-import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Subject } from 'rxjs/internal/Subject';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-import { PlanningService } from '../../planning.service'
-import { BehaviorSubject } from 'rxjs';
-import { State } from '../../state';
-import { PlanningComponent } from '../../planning.component';
+import { Component } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms'
+import { StepComponent } from '../../step.component';
 
 @Component({
   selector: 'search-equipments',
   templateUrl: './search-equipments.component.html',
   styleUrls: ['./search-equipments.component.scss']
 })
-export class SearchEquipmentsComponent implements OnInit, OnDestroy, AfterViewInit {
-  /*
-    the State.planningComponent will be inject by the parent(PlanningComponent)
-    see in 
-  */
-  state: State;
-  unsubscribe$ = new Subject();
-  searchEquipments: FormGroup;
-  
+export class SearchEquipmentsComponent extends StepComponent {
   executionDiaries = [];
-
-  constructor( private formBuilder: FormBuilder ) {}
-
-  ngAfterViewInit() {
-    this.state.ready$.subscribe((ready) => {
-      if ( ready  ) {
-        this.state.setForm( this.searchEquipments );
-      }
-    })
+  constructor( formBuilder: FormBuilder ) {
+    super( formBuilder );
   }
   ngOnInit() {
     this.initializeForms();
-    this.initializeEventSave();
-  }
-  ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    super.ngOnInit();
   }
   initializeForms() {
-    this.searchEquipments = this.formBuilder.group({
-      executionDiaryId: ['-1', Validators.required],
-      cnl: ['', Validators.required],
-      at: ['', Validators.required]
-    });
-  }
-  initializeEventSave() {
-    this.state.planningComponent.eventSave$.subscribe(( save ) => {
-      if ( save ) {
-        this.validateForm();
-        this.state.planningComponent.eventSave$.next(false);
+    if ( !this.form ) {
+      const formFields = {
+        executionDiaryId: ['-1', Validators.required],
+        cnl: ['', Validators.required],
+        at: ['', Validators.required]
       }
-    })
+      super.initializeForms( formFields );
+    }
   }
   validateForm() {
-    if ( this.searchEquipments.valid ) {
-      this.state.planningComponent.formEvaluation$.next(1);
+    if ( this.form.valid ) {
+      this.eventStepEvaluationDone(1);
+    } else {
+      for( let i in this.form.controls ) {
+        this.form.controls[i].markAsTouched();
+      }
+      this.eventStepEvaluationDone(0);
     }
+  }
+  save() {
+
   }
 }

@@ -1,36 +1,42 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-import { Subject } from 'rxjs/internal/Subject';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-import { MatStepper } from '@angular/material';
-import { PlanningService } from '../../planning.service'
+import { StepComponent } from '../../step.component';
 
 @Component({
   selector: 'save-equipments-changes',
   templateUrl: './save-equipments-changes.component.html',
   styleUrls: ['./save-equipments-changes.component.scss']
 })
-export class SaveEquipmentsChangesComponent implements OnInit, OnDestroy {
-  saveEquipmentsChanges: FormGroup;
-  @ViewChild('stepper') stepper: MatStepper;
-  unsubscribe$ = new Subject();
-  constructor(
-    private planningService: PlanningService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private formBuilder: FormBuilder
-  ) {}
-
+export class SaveEquipmentsChangesComponent extends StepComponent {
+  executionDiaries = [];
+  constructor( formBuilder: FormBuilder ) {
+    super( formBuilder );
+  }
   ngOnInit() {
-    this.saveEquipmentsChanges = this.formBuilder.group({
-      firstCtrl: ['', Validators.required]
-    });
+    this.initializeForms();
+    super.ngOnInit();
   }
-
-  ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+  initializeForms() {
+    if ( !this.form ) {
+      const formFields = {
+        executionDiaryId: ['-1', Validators.required],
+        cnl: ['', Validators.required],
+        at: ['', Validators.required]
+      }
+      super.initializeForms( formFields );
+    }
   }
+  validateForm() {
+    if ( this.form.valid ) {
+      this.eventStepEvaluationDone(1);
+    } else {
+      for( let i in this.form.controls ) {
+        this.form.controls[i].markAsTouched();
+      }
+      this.eventStepEvaluationDone(0);
+    }
+  }
+  save() {
 
-  navigate() {}
+  }
 }

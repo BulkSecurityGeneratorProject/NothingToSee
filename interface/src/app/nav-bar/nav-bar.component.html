@@ -5,7 +5,9 @@
   <div class = "ui-nav-bar-user">
     <div class = "ui-nav-bar-user-photo" [matMenuTriggerFor]="menu">
       <button mat-button class = "ui-btn ui-btn-radius">
-        <span *ngIf = "!havePhoto()" class = "fa fa-user-circle" ></span>
+        <img style = "width:100%; height: 100%; border-radius: 50%; margin-top:1px;"
+        mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+        <!-- <span *ngIf = "!havePhoto()" class = "fa fa-user-circle" ></span> -->
       </button>
     </div>
     <div class = "ui-nav-bar-user-menu">

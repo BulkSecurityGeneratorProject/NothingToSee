@@ -1,36 +1,42 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-import { Subject } from 'rxjs/internal/Subject';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-import { MatStepper } from '@angular/material';
-import { PlanningService } from '../../planning.service'
+import { Component } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms'
+import { StepComponent } from '../../step.component';
 
 @Component({
   selector: 'change-equipments',
   templateUrl: './change-equipments.component.html',
   styleUrls: ['./change-equipments.component.scss']
 })
-export class ChangeEquipmentsComponent implements OnInit, OnDestroy {
-  changeEquipments: FormGroup;
-  @ViewChild('stepper') stepper: MatStepper;
-  unsubscribe$ = new Subject();
-  constructor(
-    private planningService: PlanningService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private formBuilder: FormBuilder
-  ) {}
-
+export class ChangeEquipmentsComponent extends StepComponent {
+  executionDiaries = [];
+  constructor( formBuilder: FormBuilder ) {
+    super( formBuilder );
+  }
   ngOnInit() {
-    this.changeEquipments = this.formBuilder.group({
-      firstCtrl: ['', Validators.required]
-    });
+    this.initializeForms();
+    super.ngOnInit();
   }
-
-  ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+  initializeForms() {
+    if ( !this.form ) {
+      const formFields = {
+        executionDiaryId: ['-1', Validators.required],
+        cnl: ['', Validators.required],
+        at: ['', Validators.required]
+      }
+      super.initializeForms( formFields );
+    }
   }
+  validateForm() {
+    if ( this.form.valid ) {
+      this.eventStepEvaluationDone(1);
+    } else {
+      for( let i in this.form.controls ) {
+        this.form.controls[i].markAsTouched();
+      }
+      this.eventStepEvaluationDone(0);
+    }
+  }
+  save() {
 
-  navigate() {}
+  }
 }

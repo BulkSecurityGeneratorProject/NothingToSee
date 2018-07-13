@@ -65,9 +65,21 @@ $ui-stepper-header-color: $ui-primary-color;
 $ui-stepper-label-text-color: $ui-primary-dark-text-color;
 $ui-stepper-label-non-active-text-color: $ui-second-dark-text-color;;
 $ui-stepper-label-divisor-color: $ui-primary-dark-border-color;
+$ui-stepper-header-completed: rgb(40, 185, 52);
 
 
 /*
     Dropdown
 */
 $ui-dropdown-text-color: $ui-primary-dark-text-color;
+
+/*
+    MAT CARD
+*/
+$ui-mat-card-color: transparent;
+$ui-mat-card-text-color: $ui-second-dark-text-color;
+// $ui-mat-card-color: $ui-second-color;
+// $ui-mat-card-text-color: $ui-primary-text-color;
+$ui-mat-card-box-shadow-color: $ui-second-color;
+$ui-mat-card-border-color: $ui-primary-dark-border-color;
+

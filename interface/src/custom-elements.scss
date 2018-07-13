@@ -34,13 +34,22 @@
 .ui-btn-primary {
     background: $ui-btn-primary-color;
     color: $ui-btn-primary-text-color;
-    border-radius: 0px;
-    border: 1px solid $ui-btn-primary-border !important;
+    border-radius: 3px;
     margin: 0px;
 }
 
 .ui-btn-primary:hover {
     background: $ui-btn-primary-hover-color;
+}
+
+.ui-btn-small {
+    max-height: 20 !important;
+    min-height: 20 !important;
+    height: 20 !important;
+    padding-top: 0px !important;
+    line-height: 20px;
+    display: block;
+    margin: none;
 }
 
 .ui-select {
@@ -148,4 +157,26 @@
 }
 .mat-step-header .mat-step-icon-not-touched {
     background-color: $ui-stepper-non-active-header-color;
+}
+.ui-stepper-icon {
+    background: $ui-stepper-header-completed;
+    width: 100%; 
+    height: 100%; 
+    text-align: center;
+    border-radius: 100%; padding-top: 3px;
+}
+
+.ui-container-card {
+    width: 300px;
+    display: table-cell;
+    padding: 20px;
+    height: 200px;
+}
+.ui-card {
+    width: 100%;
+    height: 100%;
+    background: $ui-mat-card-color;
+    border-radius: 4px;
+    color: $ui-mat-card-text-color;
+    border: 1px solid $ui-mat-card-border-color !important;
 }

@@ -1,12 +1,9 @@
-import { Component, OnInit, OnDestroy, ViewChild, ComponentFactoryResolver, AfterContentInit} from '@angular/core';
-import { Subject } from 'rxjs/internal/Subject';
+import { Component, OnInit, OnDestroy, ViewChild, ComponentFactoryResolver, AfterContentInit, ViewContainerRef} from '@angular/core';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { DynamicDirective } from '../shared/directive/dynamic.directive';
-import { Step } from '../shared/models/step';
 import { MassiveComponent } from '.';
-import { MatStepper } from '@angular/material';
-import { FormGroup } from '../../../node_modules/@angular/forms';
-import { Subscription } from '../../../node_modules/rxjs';
+import { Subscription } from 'rxjs';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-container',
@@ -15,60 +12,83 @@ import { Subscription } from '../../../node_modules/rxjs';
 })
 export class PlanningComponent implements OnInit, OnDestroy, AfterContentInit {
   @ViewChild(DynamicDirective) dynamicHost: DynamicDirective;
-  @ViewChild('stepper') stepper: MatStepper;
-  states: Array<any> = [];
-  unsubscribe$ = new Subject();
-  control: FormGroup;
-  
-  actualStep$: BehaviorSubject<Step> = new BehaviorSubject(null);
-  eventSave$: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  formEvaluation$: BehaviorSubject<number> = new BehaviorSubject(-1);
+  states: Set<any> = new Set();
+  statesKeys: Array<string> = new Array();
+  subscriptions: Subscription = new Subscription();
   ready$: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  steps: Array<Step> = []
+  
+  viewContainerRef: ViewContainerRef;
+  isHome:boolean = false;
 
-  constructor ( private componentFactoryResolver: ComponentFactoryResolver ) {}
+  constructor ( 
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private router: Router,
+    private route: ActivatedRoute ) {}
   ngAfterContentInit() {
-    setTimeout(() => {
-      this.ready$.next(true);
-    }, 100)
+    this.ready$.next(true);
   }
   ngOnInit() { 
+    this.viewContainerRef = this.dynamicHost.viewContainerRef;
     this.initializeStates();
-    this.initializeFormEvaluations()
-    // Para ser uma rota
-    this.loadComponent( this.states[0] )
+    this.initializeRoutesStates();
+  }
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
   initializeStates() {
-    this.states.push( MassiveComponent )
+    this.states['manobraUnica'] = { 
+      component: MassiveComponent, 
+      name: 'Manobra única', 
+      description: 'Realizar uma única manobra',
+      icon: 'fa fa-cube'
+    };
+
+    this.states['manobraMassiva'] = {
+      component: MassiveComponent, 
+      name: 'Manobra massiva', 
+      description: 'Realizar inúmeras manobras',
+      icon: 'fa fa-cubes'
+    };
+
+    this.statesKeys = Object.keys(this.states)
   }
-  initializeFormEvaluations() {
-    this.formEvaluation$.subscribe(( evaluated ) => {
-      if ( evaluated === 1) {
-        console.log("//")
-        let actualStep = this.actualStep$.getValue();
-        this.actualStep$.next(this.steps[ actualStep.number + 1 ]);
-        this.stepper.next();
-        this.formEvaluation$.next(-1);
+  initializeRoutesStates() {
+    this.loadRoute(this.router.routerState.snapshot.url);
+    this.router.events.subscribe((event) => {
+      if ( event instanceof NavigationEnd ) {
+        this.loadRoute( event.urlAfterRedirects );
       }
     })
   }
-  eventBackward() {
-    this.stepper.previous();
-    let actualStep = this.actualStep$.getValue();
-    this.actualStep$.next(this.steps[ actualStep.number - 1 ]);
-  }
-  eventForward() {
-    this.eventSave$.next(true);
-  }
-  ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+  setState( name ) {
+    this.router.navigate([ name ], {relativeTo: this.route})
+    this.loadComponent( this.states[name] )
   }
   loadComponent( state ) {
-    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(state);
-    let viewContainerRef = this.dynamicHost.viewContainerRef;
-    viewContainerRef.clear();
-    let instance = viewContainerRef.createComponent(componentFactory).instance;
+    if (!state) {
+      this.router.navigate(['planning/home']);
+      this.isHome = true;
+      return;
+    }
+
+    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(state.component);
+    this.viewContainerRef.clear();
+    let instance = this.viewContainerRef.createComponent(componentFactory).instance;
     instance['planningComponent'] = this;
+    this.isHome = false;
+  }
+  loadRoute(url) {
+    let urlParams = url.split('/')
+    let toNavigate = urlParams[2];
+    if ( toNavigate && toNavigate !== 'home' ) {
+      let state = this.states[toNavigate];
+      this.loadComponent(state);
+    } else {
+      this.isHome = true;
+      this.router.navigate(['planning/home']);
+      if (this.viewContainerRef) {
+        this.viewContainerRef.clear();
+      }
+    }
   }
 }

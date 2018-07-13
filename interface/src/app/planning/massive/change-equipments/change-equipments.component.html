@@ -1,21 +1,18 @@
-<ng-template matStepLabel > Procurar equipamentos </ng-template>
-qweqwe
-
-<!-- <div class = "ui-stepper-container">
-    <form [formGroup] = "firstFormGroup">
+<div class = "ui-stepper-form">
+    <form [formGroup] = "form">
         <mat-form-field class = "ui-form-field">
-            <input matInput placeholder="At" formControlName="firstCtrl" required>
+            <input matInput placeholder="At" formControlName="at" required>
         </mat-form-field>
         <mat-form-field class = "ui-form-field">
-            <input matInput placeholder="Cnl" formControlName="firstCtrl" required>
+            <input matInput placeholder="Cnl" formControlName="cnl" required>
         </mat-form-field>
         <mat-form-field class = "ui-form-field">
-            <select class = "ui-select"  [(ngModel)] = "planning.executionDiaryId">
-                <option [value] = "-1" [selected] = "true">Selecine um diário</option>
-                <option class = "select-option" [value] = "executionDiary.id" *ngFor = "let executionDiary of executionDiaries">
-                    {{ executionDiary.name }}
-                </option>
-            </select>
+            <mat-select placeholder="Diário de execução" requerid>
+                <mat-option *ngFor = "let executionDiary of executionDiaries" [value] = "executionDiary.id" >
+                    {{ executionDiary?.name }}
+                </mat-option>
+            </mat-select>
         </mat-form-field>
     </form>
-</div> -->
+</div>
+    
