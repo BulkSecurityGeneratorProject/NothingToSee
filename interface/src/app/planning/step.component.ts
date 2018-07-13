@@ -10,6 +10,7 @@ export abstract class StepComponent implements OnInit, OnDestroy, AfterViewInit 
     */
     state: StateComponent;
     form: FormGroup;
+    lastForm: FormGroup;
     subscription: Subscription = new Subscription();
     
     abstract save();

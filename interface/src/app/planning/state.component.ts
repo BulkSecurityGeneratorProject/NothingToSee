@@ -71,6 +71,8 @@ export abstract class StateComponent implements OnInit, OnDestroy, AfterContentI
         viewContainerRef.clear();
         let instance = viewContainerRef.createComponent(componentFactory).instance;
         instance['state'] = this;
+        if ( step.number -1 >= 0 ) 
+            instance['lastForm'] = this.stepsFormHistory[ step.number -1 ];
         if ( this.stepsFormHistory[ step.number ] ) {
             instance['form'] = this.stepsFormHistory[ step.number ];
         }

@@ -1,18 +1,31 @@
 <div class = "ui-stepper-form">
     <form [formGroup] = "form">
         <mat-form-field class = "ui-form-field">
-            <input matInput placeholder="At" formControlName="at" required>
-        </mat-form-field>
-        <mat-form-field class = "ui-form-field">
-            <input matInput placeholder="Cnl" formControlName="cnl" required>
-        </mat-form-field>
-        <mat-form-field class = "ui-form-field">
-            <mat-select placeholder="Diário de execução" requerid>
-                <mat-option *ngFor = "let executionDiary of executionDiaries" [value] = "executionDiary.id" >
-                    {{ executionDiary?.name }}
+            <mat-select placeholder="Equipamento de origem" requerid formControlName="sourceEquipment">
+                <mat-option *ngFor = "let equipment of equipments" [value] = "equipment" >
+                    {{ equipment?.name }}
                 </mat-option>
             </mat-select>
         </mat-form-field>
+        <mat-form-field class = "ui-form-field">
+            <mat-select placeholder="Equipamento de destino" requerid formControlName="targetEquipment">
+                <mat-option *ngFor = "let equipment of equipments" [value] = "equipment" >
+                    {{ equipment?.name }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>   
     </form>
+</div>
+<div class = "ui-change-boards">
+    <div class = "ui-change-source-board">
+        <div class = "ui-equipment-board" *ngFor = "let board of sourceEquipment?.boards" >
+            {{ board.name }}
+        </div>
+    </div>
+    <div class = "ui-change-target-board">
+        <div class = "ui-equipment-board" *ngFor = "let board of targetEquipment?.boards" >
+            {{ board.name }}
+        </div>
+    </div>
 </div>
     

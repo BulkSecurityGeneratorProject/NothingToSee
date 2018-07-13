@@ -7,7 +7,7 @@
             <input matInput placeholder="Cnl" formControlName="cnl" required>
         </mat-form-field>
         <mat-form-field class = "ui-form-field">
-            <mat-select placeholder="Diário de execução" requerid>
+            <mat-select placeholder="Diário de execução" formControlName="executionDiaryId" requerid>
                 <mat-option *ngFor = "let executionDiary of executionDiaries" [value] = "executionDiary.id" >
                     {{ executionDiary?.name }}
                 </mat-option>

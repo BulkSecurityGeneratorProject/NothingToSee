@@ -17,7 +17,7 @@ const appRoutes: Routes = [
       }]
     },
     { path: 'login', component: LoginComponent },
-    { path: '**', redirectTo: '' }
+    { path: '**', redirectTo: 'error' }
 ];
 
 @NgModule({

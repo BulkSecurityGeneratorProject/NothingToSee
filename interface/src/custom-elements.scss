@@ -27,7 +27,9 @@
     border-radius: 25px;
     padding: 0px;
 }
-
+.ui-btn-reverse {
+    color: $ui-primary-dark-text-color;
+}
 .ui-btn-text {
     height: 35px;
 }

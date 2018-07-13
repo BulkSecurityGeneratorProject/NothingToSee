@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-import { Subject } from 'rxjs/internal/Subject';
-import { OnDestroy, AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
+import { OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
 import { User } from '../shared/models/user';
 import { UserService } from '../user/user.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-side-bar',
@@ -12,29 +12,27 @@ import { UserService } from '../user/user.service';
 })
 export class SideBarComponent implements OnInit, OnDestroy {
   state;
-  unsubscribe$ = new Subject();
+  subscriptions: Subscription = new Subscription();
   user: User;
   constructor(
     private router: Router,
-    private route: ActivatedRoute,
     private userService: UserService
   ) {}
 
   ngOnInit() {
     this.state = this.parseUrl(this.router.url);
-    this.router.events.subscribe((event) =>{
+    this.subscriptions.add(this.router.events.subscribe((event) =>{
       if ( event instanceof NavigationEnd ) {
         this.state = this.parseUrl(event.urlAfterRedirects);
       }
-    })
-    this.userService.currentUser$.subscribe(( user ) => {
+    }))
+    this.subscriptions.add(this.userService.currentUser$.subscribe(( user ) => {
       this.user = user;
-    })
+    }))
   }
 
   ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.subscriptions.unsubscribe();
   }
 
   parseUrl( fullUrl ) {
