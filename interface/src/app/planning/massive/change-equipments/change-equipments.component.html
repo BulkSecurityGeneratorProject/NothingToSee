@@ -1,30 +1,53 @@
 <div class = "ui-stepper-form">
-    <form [formGroup] = "form">
+    <form [formGroup] = "form" class = "ui-change-form">
         <mat-form-field class = "ui-form-field">
-            <mat-select placeholder="Equipamento de origem" requerid formControlName="sourceEquipment">
+            <mat-select placeholder="Equipamento de origem" requerid formControlName="sourceEquipment" 
+            (selectionChange) = "removeByType('source')">
                 <mat-option *ngFor = "let equipment of equipments" [value] = "equipment" >
                     {{ equipment?.name }}
                 </mat-option>
             </mat-select>
         </mat-form-field>
         <mat-form-field class = "ui-form-field">
-            <mat-select placeholder="Equipamento de destino" requerid formControlName="targetEquipment">
+            <mat-select placeholder="Equipamento de destino" requerid formControlName="targetEquipment" 
+            (selectionChange) = "removeByType('target')">
                 <mat-option *ngFor = "let equipment of equipments" [value] = "equipment" >
                     {{ equipment?.name }}
                 </mat-option>
             </mat-select>
         </mat-form-field>   
     </form>
-</div>
-<div class = "ui-change-boards">
-    <div class = "ui-change-source-board">
-        <div class = "ui-equipment-board" *ngFor = "let board of sourceEquipment?.boards" >
-            {{ board.name }}
+    <div class = "ui-boards">
+        <div #dragPlace class = "ui-source-board">
+            <div class = "ui-equipment-board" *ngFor = "let board of sourceEquipment?.boards"
+            (drag) = "drag($event, 'source')" (dragend) = "dragEnd($event)">
+                <div class = "ui-equipment" [draggable] = "canDrag('source')">
+                    <span>{{ board.name }}</span>
+               </div>
+            </div>
+            <div draggable = "false" class = "ui-equipment-board-empty" *ngIf = "sourceEquipment && sourceEquipment?.boards.length === dragController.elements['source']?.length">
+                Nenhuma placa
+            </div>
         </div>
-    </div>
-    <div class = "ui-change-target-board">
-        <div class = "ui-equipment-board" *ngFor = "let board of targetEquipment?.boards" >
-            {{ board.name }}
+
+        
+        <div #dropPlace [hidden] = "!sourceEquipment && !targetEquipment" class = "ui-boards-to-change" (dragover)="dropOver($event)" (drop)="drop($event)">
+            <div *ngIf = "dragController.elements.size === 0">
+                Coloque as placas para serem manobradas
+            </div>
+        </div>
+
+
+        <div class = "ui-target-board">
+            <div class = "ui-equipment-board" *ngFor = "let board of targetEquipment?.boards">
+                <button mat-button class = "ui-equipment" (drag) = "drag($event, 'target')"
+                [draggable] = "canDrag('target')">
+                    {{ board.name }} <span class = "fa fa-close"></span>
+               </button>
+            </div>
+            <div draggable = "false" class = "ui-equipment-board-empty" *ngIf = "targetEquipment && targetEquipment?.boards.length === dragController.elements['target']?.length">
+                Nenhuma placa
+            </div>
         </div>
     </div>
 </div>

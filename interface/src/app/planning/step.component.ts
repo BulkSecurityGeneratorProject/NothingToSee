@@ -18,10 +18,10 @@ export abstract class StepComponent implements OnInit, OnDestroy, AfterViewInit 
     constructor(private formBuilder: FormBuilder) {}
     ngAfterViewInit() {
         this.state.ready$.subscribe((ready) => {
-                if ( ready  ) {
-                    this.state.setForm( this.form );
-                }
-            })
+            if ( ready  ) {
+                this.state.setForm( this.form );
+            }
+        })
     }
     ngOnInit() {
         this.initializeEventSave();
