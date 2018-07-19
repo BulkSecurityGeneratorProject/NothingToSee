@@ -2,6 +2,7 @@
     Paleta
 */
 $ui-primary-color: rgb(35, 123, 255);
+$ui-primary-disabled-color: rgb(160, 160, 160);
 $ui-primary-dark-color: rgba(88, 98, 119, 0.562);
 $ui-primary-hover-color: rgb(16, 125, 242) !important;
 $ui-second-color: rgba(0, 0, 0, 0.8);
@@ -26,6 +27,7 @@ $ui-btn-primary-color: $ui-primary-color !important;
 $ui-btn-primary-text-color: $ui-second-border-color;
 $ui-btn-primary-border: $ui-primary-border-color;
 $ui-btn-primary-hover-color: $ui-primary-hover-color;
+$ui-btn-primary-disabled-color: $ui-primary-disabled-color;
 /*
     Container
 */

@@ -9,8 +9,10 @@ import { StepComponent } from '../../step.component';
 })
 export class SaveEquipmentsChangesComponent extends StepComponent {
   executionDiaries = [];
-  constructor( formBuilder: FormBuilder ) {
-    super( formBuilder );
+  formBuilder: FormBuilder;
+  constructor(formBuilder: FormBuilder) {
+    super();
+    this.formBuilder = formBuilder;
   }
   ngOnInit() {
     this.initializeForms();
@@ -27,16 +29,8 @@ export class SaveEquipmentsChangesComponent extends StepComponent {
     }
   }
   validateForm() {
-    if ( this.form.valid ) {
-      this.eventStepEvaluationDone(1);
-    } else {
-      for( let i in this.form.controls ) {
-        this.form.controls[i].markAsTouched();
-      }
-      this.eventStepEvaluationDone(0);
-    }
   }
-  save() {
+  eventSave() {
 
   }
 }

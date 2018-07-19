@@ -9,15 +9,25 @@
     line-height: 20px;
     padding-left: 20px;
     padding-right: 20px;
-    height: 40px;
+    height: 30px;
+    border-radius: 3px;
 }
 .mat-button, 
 .mat-flat-button, 
 .mat-icon-button, 
 .mat-stroked-button {
-    min-width: 40px;
-    min-height: 40px;
+    min-width: 30px;
+    min-height: 30px;
 }
+.ui-btn-primary[disabled] {
+    background: $ui-primary-disabled-color !important;
+    color: $ui-primary-text-color !important;
+}
+
+.ui-btn-primary[disabled]:hover {
+    background: $ui-primary-disabled-color !important;
+}
+
 .ui-btn-radius {
     color: white;
     text-align: center;
@@ -27,6 +37,13 @@
     border-radius: 25px;
     padding: 0px;
 }
+.ui-btn-draggable {
+    color: $ui-third-dark-text-color;
+    border: 1px solid $ui-primary-dark-border-color;
+    width: auto;
+    height: 30px;
+    font-size: 12px;
+}
 .ui-btn-reverse {
     color: $ui-primary-dark-text-color;
 }
@@ -34,6 +51,7 @@
     height: 35px;
 }
 .ui-btn-primary {
+    height: 30px;
     background: $ui-btn-primary-color;
     color: $ui-btn-primary-text-color;
     border-radius: 3px;

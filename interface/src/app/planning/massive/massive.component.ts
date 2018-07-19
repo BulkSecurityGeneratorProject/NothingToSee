@@ -23,7 +23,7 @@ export class MassiveComponent extends StateComponent {
         this.steps.push(new Step('Procurar equipamentos', Status.ACTUAL, SearchEquipmentsComponent, 0));
         this.steps.push(new Step('Realizar manobras', Status.NOT_ACTIVATED, ChangeEquipmentsComponent, 1));
         this.steps.push(new Step('Simular e salvar', Status.NOT_ACTIVATED, SaveEquipmentsChangesComponent, 2));
-        this.setInitialStep( this.steps[0] );
+        this.setInitialStep(0);
         this.eventStepChange();
     }
     isCompleted( number: number ) {
@@ -33,11 +33,6 @@ export class MassiveComponent extends StateComponent {
     eventBackward( index ) {
         this.stepper.previous();
         super.eventBackward(index);
-        this.stepChangeDone = false;
-    }
-    eventFormEvaluationDone() {
-        this.stepper.next();
-        super.eventFormEvaluationDone();
         this.stepChangeDone = false;
     }
     eventStepChange() {

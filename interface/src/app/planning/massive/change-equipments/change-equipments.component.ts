@@ -1,9 +1,11 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms'
+import { FormBuilder, Validators, Form, FormGroup, FormControl } from '@angular/forms'
 import { StepComponent } from '../../step.component';
 import { ChangeEquipmentsService } from './change-equipments.service';
 import { Equipment } from '../../../shared/models/equipment';
-import { group } from '../../../../../node_modules/@angular/animations';
+import { DragAndDrop, Element } from '../../../shared/directive/dragAndDrop';
+import { MassivePlanning, BoardChange } from '../../../shared/models/massivePlanning';
+import { Board } from '../../../shared/models/board';
 
 @Component({
   selector: 'change-equipments',
@@ -12,28 +14,46 @@ import { group } from '../../../../../node_modules/@angular/animations';
 })
 export class ChangeEquipmentsComponent extends StepComponent {
   @ViewChild('dropPlace') dropPlace: ElementRef;
-  @ViewChild('dragPlace') dragPlace: ElementRef;
-  equipments = [];
-  sourceEquipment: Equipment;
-  targetEquipment: Equipment;
+  
+  actualBoardChange: BoardChange;
   dragController: DragAndDrop;
-  lastDragged ;
+  equipments = [];  
+  lastDragged;
+  simulationResult: boolean = false;
+  massivePlanning: MassivePlanning;
 
-  constructor( formBuilder: FormBuilder, private changeEquipmentsService: ChangeEquipmentsService ) {
-    super( formBuilder );
+  constructor(formBuilder: FormBuilder, private changeEquipmentsService: ChangeEquipmentsService) {
+    super();
+    this.formBuilder = formBuilder;
   }
   ngOnInit() {
     this.initializeForms();
     this.initializeEquipments();
-    this.onChanges();
-    this.dragController = new DragAndDrop(this.dropPlace.nativeElement, this.dragPlace.nativeElement);
-    super.ngOnInit();
+    this.dragController = new DragAndDrop(this.dropPlace.nativeElement);
+  }
+  ngAfterContentInit() {
+    this.state.ready$.subscribe((ready) => {
+      if (ready) {
+        setTimeout(() => {
+          this.state.setForm( this.form );
+        })
+      }
+    })
   }
   canDrag(type) {
     return this.lastDragged != type;
   }
-  drag(ev, type) {
-    this.dragController.drag(ev, type);
+  createBoardChange(element: Element) {
+    this.actualBoardChange = new BoardChange(element.data.board, element.type)
+    this.massivePlanning.boardsChange.push(this.actualBoardChange);
+  }
+  completeBoardChange(element: Element) {
+    this.actualBoardChange.setBoardByType(element.data.board, element.type);
+    this.actualBoardChange = undefined;
+    this.lastDragged = undefined;
+  }
+  drag(ev, type, board:Board, equipment: Equipment) {
+    this.dragController.drag(ev, type, {board: board, equipment: equipment});
   }
   dragEnd(ev) {
     this.dragController.dragEnd(ev);
@@ -42,21 +62,31 @@ export class ChangeEquipmentsComponent extends StepComponent {
     this.dragController.dropOver(ev);
   }
   drop(ev) {
-    let actualElementType = this.dragController.actualElement.type;
-    if ( this.lastDragged && this.lastDragged !== actualElementType) {
-      this.lastDragged = undefined;
+    let actualElement = this.dragController.actualElement;
+    if ( this.lastDragged && this.lastDragged !== actualElement.type) {
+      this.completeBoardChange(actualElement);
     } else {
-      this.lastDragged = actualElementType;
+      this.createBoardChange(actualElement);
+      this.lastDragged = actualElement.type;
     }
     this.dragController.drop(ev);
   }
+  equipmentChanged() {
+    if (this.haveBoardChangeCompleted()) {
+      this.dragController.removeAll();
+      this.resetBoardChanges();
+    }
+  }
   initializeForms() {
     if ( !this.form ) {
-      const formFields = {
-        sourceEquipment: [null, Validators.required],
-        targetEquipment: [null, Validators.required],
-      }
-      super.initializeForms( formFields );
+      this.form = this.formBuilder.group({
+        massivePlanning: this.formBuilder.group({
+          sourceEquipment: [null, Validators.required],
+          targetEquipment: [null, Validators.required],
+          boardsChange: [new Array<BoardChange>(), Validators.required]
+        })
+      })
+      this.onChanges();
     }
   }
   initializeEquipments() {
@@ -65,110 +95,58 @@ export class ChangeEquipmentsComponent extends StepComponent {
         this.equipments = equipments
       });
   }
+  haveBoardChangeCompleted() {
+    if ( this.actualBoardChange && (!this.actualBoardChange.sourceBoard || !this.actualBoardChange.targetBoard)) {
+      return this.massivePlanning.boardsChange.length > 1;
+    }
+    return this.massivePlanning && this.massivePlanning.boardsChange.length > 0;
+  }
   onChanges() {
-    this.form.get('sourceEquipment').valueChanges.subscribe(val => {
-      this.sourceEquipment = val;
-    });
-    this.form.get('targetEquipment').valueChanges.subscribe(val => {
-      this.targetEquipment = val;
-    });
+    this.subscription.add(this.form.get('massivePlanning').valueChanges.subscribe((massivePlanning) => this.massivePlanning));
+  }
+  removeBoardChangesByType( elements, type ) {
+    if (!elements) {
+      return;
+    }
+
+    for(let boardChange of this.massivePlanning.boardsChange) {
+      if (type === 'target') {
+        boardChange.targetBoard = undefined;
+      } else {
+        boardChange.sourceBoard = undefined;
+      }
+    }
   }
   removeByType(type) {
+    let elements:Array<Element> = this.dragController.elements[type];
+    this.removeBoardChangesByType(elements, type);
     this.dragController.removeByType(type);
   }
-  save() {}
+  resetBoardChanges() {
+    this.lastDragged = undefined;
+    this.actualBoardChange = undefined;
+    this.massivePlanning.boardsChange = [];
+  }
+  eventSave() {
+    if (this.validateForm()) {
+
+    }
+  }
+  eventSimulation() {
+    this.changeEquipmentsService.simulation(this.form.getRawValue()).subscribe((result) => {
+      console.log(result)
+    },(error => {
+      console.log(error);
+    }))
+  }
   validateForm() {
-    if ( this.form.valid) {
-      this.eventStepEvaluationDone(1);
+    if (this.form.valid && this.simulationResult) {
+      return true;
     } else {
       for( let i in this.form.controls ) {
         this.form.controls[i].markAsTouched();
       }
-      this.eventStepEvaluationDone(0);
+      return false;
     }
-  }
-}
-
-class DragAndDrop {
-  elements: Set<Element> = new Set();
-  actualElement: Element;
-  constructor( private dropPlace: HTMLElement, private dragPlace: HTMLElement ) {}
-
-  drag(ev, type) {
-    let sourceElement: HTMLElement = ev.srcElement;
-    this.actualElement = new Element(sourceElement, type);
-    ev.stopPropagation();
-    ev.preventDefault();
-  }
-  dragEnd(ev) {
-    if ( this.actualElement && !this.actualElement.isDone() ) {
-      this.actualElement = undefined;
-    }
-  }
-  dropOver(ev) {
-    ev.preventDefault();
-    ev.stopPropagation();
-  }
-  drop(ev) {
-    if ( !this.actualElement ) {
-      return;
-    }
-
-    this.actualElement.grandParent.removeChild(this.actualElement.parent);
-    this.actualElement.element.setAttribute('draggable', 'false');
-    this.dropPlace.appendChild( this.actualElement.element );
-    this.elements.add(this.actualElement);
-    
-    let group = this.elements[this.actualElement.type];
-    if (!group) {
-      group = this.elements[this.actualElement.type] = [];
-    }
-
-    this.elements[this.actualElement.type] = group = [...group, this.actualElement];
-    this.actualElement.done = true;
-    this.actualElement = undefined;
-    ev.stopPropagation();
-    ev.preventDefault();
-  }
-  removeByType( type ) {
-    let group = this.elements[type];
-
-    if (!group) {
-      return;
-    }
-
-    for(let i = 0; i < group.length; i++) {
-      let dragged = group[i];
-      this.dropPlace.removeChild( dragged.element );
-      dragged.grandParent.appendChild( dragged.parent );
-      this.elements.delete(dragged);
-      group.splice(i, 1);
-      i--;
-    }
-    
-  }
-  removeAll() {
-    this.elements.forEach((dragged) => {
-        this.dropPlace.removeChild( dragged.element )
-        dragged.grandParent.appendChild( dragged.parent );
-        this.elements.delete(dragged);
-    })
-  }
-}
-
-class Element {
-  element: HTMLElement;
-  parent: HTMLElement;
-  grandParent: HTMLElement;
-  type: string
-  done: boolean = false;
-  constructor( element: HTMLElement, type: string) {
-    this.element = element;
-    this.parent = element.parentElement;
-    this.grandParent = this.parent.parentElement;
-    this.type = type;
-  }
-  isDone() {
-    return this.done;
   }
 }

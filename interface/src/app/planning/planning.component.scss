@@ -1,7 +1,7 @@
 @import "../app.component.scss";
 .ui-stepper {
     float: left;
-    height: calc(100% - 70px);
+    height: calc(100% - 50px);
     width: 100%;
     padding-top: 10px;
 }
@@ -15,6 +15,7 @@
     width: 100%;
     height: 40px;
     padding-right: 20px;
+    padding-top: 10px;
 }
 .ui-stepper-form {
     display: flex;

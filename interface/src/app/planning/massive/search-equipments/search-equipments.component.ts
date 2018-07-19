@@ -11,8 +11,10 @@ import { ExecutionDiary } from '../../../shared/models/execution-diary';
 })
 export class SearchEquipmentsComponent extends StepComponent {
   executionDiaries = [];
+  formBuilder: FormBuilder;
   constructor( formBuilder: FormBuilder, private searchEquipmentsService: SearchEquipmentsService ) {
-    super( formBuilder );
+    super();
+    this.formBuilder = formBuilder;
   }
   ngOnInit() {
     this.initializeForms();
@@ -36,14 +38,17 @@ export class SearchEquipmentsComponent extends StepComponent {
   }
   validateForm() {
     if ( this.form.valid ) {
-      this.eventStepEvaluationDone(1);
+      return true;
     } else {
-      for( let i in this.form.controls ) {
+      for ( let i in this.form.controls ) {
         this.form.controls[i].markAsTouched();
       }
-      this.eventStepEvaluationDone(0);
+      return false;
     }
   }
-  save() {
+  eventSave() {
+    if (this.validateForm()) {
+      super.eventSave();
+    }
   }
 }

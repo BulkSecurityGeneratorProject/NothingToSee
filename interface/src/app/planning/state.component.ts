@@ -8,13 +8,12 @@ import { PlanningComponent } from './planning.component';
 export abstract class StateComponent implements OnInit, OnDestroy, AfterContentInit {
     @ViewChild(DynamicDirective) dynamicHost: DynamicDirective;
     /*
-        the State.planningComponent will be inject by the parent(PlanningComponent)
-        see in 
+    the State.planningComponent will be inject by the parent(PlanningComponent)
+    see in 
     */
-    actualStep$: BehaviorSubject<Step> = new BehaviorSubject(null);
-    eventSave$: BehaviorSubject<boolean> = new BehaviorSubject(false);
-    formEvaluation$: BehaviorSubject<number> = new BehaviorSubject(-1);
     planningComponent: PlanningComponent;
+
+    actualStep$: BehaviorSubject<number> = new BehaviorSubject(null);
     ready$: BehaviorSubject<boolean> = new BehaviorSubject(false);
     subscriptions: Subscription = new Subscription();
 
@@ -22,73 +21,51 @@ export abstract class StateComponent implements OnInit, OnDestroy, AfterContentI
     steps: Array<Step> = new Array();
     step: Step;
     stepsFormHistory: Set<any> = new Set();
-    index: number = -1;
 
     abstract initializeSteps();
     constructor(private componentFactoryResolver: ComponentFactoryResolver) {}
     ngOnInit() {
-        this.initializeFormEvaluations()
         this.watchStep();
     }
     ngAfterContentInit() {
         this.initializeSteps();
         setTimeout(() => {
             this.ready$.next(true);
-        }, 100)
+        })
     }
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
     }
-
-    initializeFormEvaluations() {
-        this.subscriptions.add(this.formEvaluation$.subscribe(( evaluated ) => {
-          if ( evaluated === 1) {
-            this.eventFormEvaluationDone();
-          }
-        }))
+    eventBackward(index:number) {
+        this.actualStep$.next(index);
     }
-    eventBackward(index) {
-        this.index = index;
-        if (  this.index >= 0 ) {
-            this.actualStep$.next(this.steps[  this.index ]);
-            this.index = null;
-        }
+    eventForward(index: number) {
+        this.actualStep$.next(index);
     }
-    eventFormEvaluationDone() {
-        if ( this.index < this.steps.length ) {
-            this.actualStep$.next( this.steps[ this.index ] );
-            this.index = null;
-        }
-        this.formEvaluation$.next(-1);
-    }
-    eventForward(index) {
-        this.index = index;
-        this.eventSave$.next(true);
-    }
-    loadStepComponent( step ) {
+    loadStepComponent(step) {
         let componentFactory = this.componentFactoryResolver.resolveComponentFactory(step.component);
         let viewContainerRef = this.dynamicHost.viewContainerRef;
         viewContainerRef.clear();
         let instance = viewContainerRef.createComponent(componentFactory).instance;
         instance['state'] = this;
-        if ( step.number -1 >= 0 ) 
-            instance['lastForm'] = this.stepsFormHistory[ step.number -1 ];
-        if ( this.stepsFormHistory[ step.number ] ) {
-            instance['form'] = this.stepsFormHistory[ step.number ];
+        if (step.number -1 >= 0) 
+            instance['lastForm'] = this.stepsFormHistory[step.number -1];
+        if (this.stepsFormHistory[ step.number ]) {
+            instance['form'] = this.stepsFormHistory[step.number];
         }
     }
     setForm( form: FormGroup ) {
         this.actualForm = form;
         this.stepsFormHistory[ this.step.number ] = this.actualForm;
     }
-    setInitialStep( step ) {
-        this.actualStep$.next( step );
+    setInitialStep(index: number) {
+        this.actualStep$.next(index);
     }
     watchStep() {
-        this.subscriptions.add(this.actualStep$.subscribe(( step ) => {
-            if ( step != null ) {
-                this.loadStepComponent(step);
-                this.step = step;
+        this.subscriptions.add(this.actualStep$.subscribe(( index ) => {
+            if (index != null) {
+                this.step = this.steps[index]
+                this.loadStepComponent(this.step);
             }
         }))
     }
