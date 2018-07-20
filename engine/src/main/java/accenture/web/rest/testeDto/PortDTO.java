@@ -23,4 +23,5 @@ public class PortDTO {
         this.number = number;
         this.id = id;
     }
+    public PortDTO() {}
 }

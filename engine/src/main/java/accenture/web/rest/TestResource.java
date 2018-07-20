@@ -1,17 +1,15 @@
 package accenture.web.rest;
 
+import accenture.web.rest.errors.*;
 import accenture.web.rest.testeDto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api")
@@ -47,7 +45,7 @@ public class TestResource {
      * @return the ResponseEntity with status 200 (OK) and with body the "login" user, or with status 404 (Not Found)
      */
     @GetMapping("/equipments")
-    public ResponseEntity<List<EquipmentDTO>> getEquipments(String cnl,String at, String executionDiaryId) {
+    public ResponseEntity<List<EquipmentDTO>> getEquipments(java.lang.String cnl, java.lang.String at, java.lang.String executionDiaryId) {
         List<EquipmentDTO>  equipments = this.searchForEquipments(cnl, at, executionDiaryId);
         return new ResponseEntity<List<EquipmentDTO>>(equipments,  HttpStatus.CREATED);
     }
@@ -66,27 +64,18 @@ public class TestResource {
      * @throws BadRequestAlertException 400 (Bad Request) if the login or email is already in use
      */
     @PostMapping("/massivePlanning/simulation")
-    public ResponseEntity<Boolean> simulation(@Valid @RequestBody MassivePlanningDTO massivePlanning)  {
-        return new ResponseEntity<Boolean>(true,  HttpStatus.CREATED);
-//        log.debug("REST request to save User : {}", userDTO);
-//
-//        if (userDTO.getId() != null) {
-//            throw new BadRequestAlertException("A new user cannot already have an ID", "userManagement", "idexists");
-//            // Lowercase the user login before comparing with database
-//        } else if (userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).isPresent()) {
-//            throw new LoginAlreadyUsedException();
-//        } else if (userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).isPresent()) {
-//            throw new EmailAlreadyUsedException();
-//        } else {
-//            User newUser = userService.createUser(userDTO);
-//            mailService.sendCreationEmail(newUser);
-//            return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
-//                .headers(HeaderUtil.createAlert( "A user is created with identifier " + newUser.getLogin(), newUser.getLogin()))
-//                .body(newUser);
-//        }
+    public ResponseEntity<List<Map<String, String>>> simulation(@Valid @RequestBody MassivePlanningDTO massivePlanning)  {
+        List<Map<String, String>> boardChangeDTOS = new ArrayList<>();
+        for(BoardChangeDTO boardChangeDTO: massivePlanning.getBoardsChange()) {
+            Map<String, String> incompatible = new HashMap<>();
+            incompatible.put("sourceBoardId", boardChangeDTO.getSourceBoard().getId());
+            incompatible.put("targetBoardId", boardChangeDTO.getTargetBoard().getId());
+            boardChangeDTOS.add(incompatible);
+        }
+        return new ResponseEntity<List<Map<String, String>>>(boardChangeDTOS, HttpStatus.CREATED);
     }
 
-    private List<EquipmentDTO> searchForEquipments(String cnl, String at, String executionDiaryId) {
+    private List<EquipmentDTO> searchForEquipments(java.lang.String cnl, java.lang.String at, java.lang.String executionDiaryId) {
         List<PortDTO> ports1 = Arrays.asList( new PortDTO("asd", 1), new PortDTO("asdasd", 5), new PortDTO("as123d", 1) );
         List<PortDTO> ports2 = Arrays.asList( new PortDTO("a2", 1), new PortDTO("asdasd", 5), new PortDTO("as123d", 1) );
         List<PortDTO> ports3 = Arrays.asList( new PortDTO("as12d", 1), new PortDTO("d", 5), new PortDTO("asd1", 1) );

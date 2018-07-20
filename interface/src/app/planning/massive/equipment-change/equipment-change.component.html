@@ -85,7 +85,7 @@
     <button mat-button class = "ui-btn ui-btn-reverse" *ngIf = "step?.number !== 0" (click) = "eventBackward()">
         <span>Voltar</span>
     </button> 
-    <button [disabled] = "!simulationResult" mat-button class = "ui-btn ui-btn-primary ui-btn-text" style = "float: right" (click) = "eventSave()">
+    <button [disabled] = "!simulationResult || simulationResult.length > 0" mat-button class = "ui-btn ui-btn-primary ui-btn-text" style = "float: right" (click) = "eventSave()">
         <span>Continuar</span>
     </button>
     <button mat-button class = "ui-btn ui-btn-primary ui-btn-text" style = "float: right; margin-right: 10px;" (click) = "eventSimulation()">

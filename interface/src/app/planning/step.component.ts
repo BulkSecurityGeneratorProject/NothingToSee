@@ -2,12 +2,14 @@ import { AfterViewInit, OnDestroy, OnInit, AfterContentInit, AfterViewChecked } 
 import { StateComponent } from "./state.component";
 import { FormGroup, FormBuilder } from "@angular/forms";
 import { Subscription } from "rxjs";
+import { MatDialog, MatDialogRef } from "@angular/material";
 
 export abstract class StepComponent implements OnInit, OnDestroy, AfterContentInit {
-    formBuilder: FormBuilder
+    dialog: MatDialog;
+    formBuilder: FormBuilder;
+    dialogRef: MatDialogRef<any>;
     /*
-        the State.planningComponent will be inject by the parent(PlanningComponent)
-        see in 
+        the state will be inject by the parent(StateComponent)
     */
     state: StateComponent;
     form: FormGroup;

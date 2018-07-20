@@ -1,8 +1,8 @@
 import { Component, ComponentFactoryResolver, ViewChild } from '@angular/core'
 import { Step, Status } from '../../shared/models/step';
-import { SearchEquipmentsComponent } from './search-equipments/search-equipments.component';
-import { ChangeEquipmentsComponent } from './change-equipments/change-equipments.component';
-import { SaveEquipmentsChangesComponent } from './save-equipments-changes/save-equipments-changes.component';
+import { EquipmentSearchComponent } from './equipment-search/equipment-search.component';
+import { EquipmentChangeComponent } from './equipment-change/equipment-change.component';
+import { SaveEquipmentChangeComponent } from './save-equipment-change/save-equipment-change.component';
 import { StateComponent } from '../state.component';
 import { MatStepper } from '@angular/material';
 import { FormGroup } from '@angular/forms';
@@ -20,9 +20,9 @@ export class MassiveComponent extends StateComponent {
         super( componentFactoryResolver );
     }
     initializeSteps() {
-        this.steps.push(new Step('Procurar equipamentos', Status.ACTUAL, SearchEquipmentsComponent, 0));
-        this.steps.push(new Step('Realizar manobras', Status.NOT_ACTIVATED, ChangeEquipmentsComponent, 1));
-        this.steps.push(new Step('Simular e salvar', Status.NOT_ACTIVATED, SaveEquipmentsChangesComponent, 2));
+        this.steps.push(new Step('Procurar equipamentos', Status.ACTUAL, EquipmentSearchComponent, 0));
+        this.steps.push(new Step('Realizar manobras', Status.NOT_ACTIVATED, EquipmentChangeComponent, 1));
+        this.steps.push(new Step('Simular e salvar', Status.NOT_ACTIVATED, SaveEquipmentChangeComponent, 2));
         this.setInitialStep(0);
         this.eventStepChange();
     }

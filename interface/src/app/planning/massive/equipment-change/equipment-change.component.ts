@@ -1,29 +1,33 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { FormBuilder, Validators, Form, FormGroup, FormControl } from '@angular/forms'
+import { FormBuilder, Validators } from '@angular/forms'
 import { StepComponent } from '../../step.component';
-import { ChangeEquipmentsService } from './change-equipments.service';
+import { EquipmentChangeService } from './equipment-change.service';
 import { Equipment } from '../../../shared/models/equipment';
 import { DragAndDrop, Element } from '../../../shared/directive/dragAndDrop';
 import { MassivePlanning, BoardChange } from '../../../shared/models/massivePlanning';
 import { Board } from '../../../shared/models/board';
+import { ModalError } from './modals/modal-error.component';
+import { EquimentChangeErrorType } from './equipment-change-error.enum';
+import { MatDialog } from '@angular/material';
 
 @Component({
-  selector: 'change-equipments',
-  templateUrl: './change-equipments.component.html',
-  styleUrls: ['./change-equipments.component.scss']
+  selector: 'equipment-change',
+  templateUrl: './equipment-change.component.html',
+  styleUrls: ['./equipment-change.component.scss']
 })
-export class ChangeEquipmentsComponent extends StepComponent {
+export class EquipmentChangeComponent extends StepComponent {
   @ViewChild('dropPlace') dropPlace: ElementRef;
   
   actualBoardChange: BoardChange;
   dragController: DragAndDrop;
   equipments = [];  
   lastDragged;
-  simulationResult: boolean = false;
+  simulationResult: any;
   massivePlanning: MassivePlanning;
 
-  constructor(formBuilder: FormBuilder, private changeEquipmentsService: ChangeEquipmentsService) {
+  constructor(dialog: MatDialog, formBuilder: FormBuilder, private equipmentsChangeService: EquipmentChangeService) {
     super();
+    this.dialog = dialog;
     this.formBuilder = formBuilder;
   }
   ngOnInit() {
@@ -90,7 +94,7 @@ export class ChangeEquipmentsComponent extends StepComponent {
     }
   }
   initializeEquipments() {
-    this.changeEquipmentsService.getEquipments( this.lastForm.getRawValue() )
+    this.equipmentsChangeService.getEquipments( this.lastForm.getRawValue() )
       .subscribe(( equipments ) =>  {
         this.equipments = equipments
       });
@@ -102,20 +106,15 @@ export class ChangeEquipmentsComponent extends StepComponent {
     return this.massivePlanning && this.massivePlanning.boardsChange.length > 0;
   }
   onChanges() {
-    this.subscription.add(this.form.get('massivePlanning').valueChanges.subscribe((massivePlanning) => this.massivePlanning));
+    this.subscription.add(this.form.get('massivePlanning').valueChanges.subscribe((massivePlanning) => {
+      this.massivePlanning = massivePlanning;
+    }));
   }
   removeBoardChangesByType( elements, type ) {
     if (!elements) {
       return;
     }
-
-    for(let boardChange of this.massivePlanning.boardsChange) {
-      if (type === 'target') {
-        boardChange.targetBoard = undefined;
-      } else {
-        boardChange.sourceBoard = undefined;
-      }
-    }
+    this.massivePlanning.boardsChange = [];
   }
   removeByType(type) {
     let elements:Array<Element> = this.dragController.elements[type];
@@ -129,24 +128,34 @@ export class ChangeEquipmentsComponent extends StepComponent {
   }
   eventSave() {
     if (this.validateForm()) {
-
     }
   }
   eventSimulation() {
-    this.changeEquipmentsService.simulation(this.form.getRawValue()).subscribe((result) => {
-      console.log(result)
-    },(error => {
-      console.log(error);
-    }))
+    if (this.validateForm()) {
+      this.equipmentsChangeService.simulation(this.form.getRawValue()).subscribe((result) => {
+        this.simulationResult = result;
+        console.log(result);
+      },(error => {
+        // this.simulationResult = false;
+        console.log(error);
+      }))
+    } else {
+      this.loadSimulationErrorModal(EquimentChangeErrorType.INVALID_FORM);
+    }
+  }
+  loadSimulationErrorModal(errorType: EquimentChangeErrorType) {
+    this.dialogRef = this.dialog.open(ModalError);
+    this.dialogRef.componentInstance['errorType'] = errorType;
   }
   validateForm() {
-    if (this.form.valid && this.simulationResult) {
-      return true;
-    } else {
-      for( let i in this.form.controls ) {
-        this.form.controls[i].markAsTouched();
-      }
-      return false;
-    }
+    return false;
+    // if (this.form.valid && this.simulationResult) {
+    //   return true;
+    // } else {
+    //   for( let i in this.form.controls ) {
+    //     this.form.controls[i].markAsTouched();
+    //   }
+    //   return false;
+    // }
   }
 }

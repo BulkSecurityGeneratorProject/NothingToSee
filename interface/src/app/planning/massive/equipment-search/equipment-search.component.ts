@@ -1,18 +1,18 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms'
 import { StepComponent } from '../../step.component';
-import { SearchEquipmentsService } from './search-equipments.service';
+import { EquipmentSearchService } from './equipment-search.service';
 import { ExecutionDiary } from '../../../shared/models/execution-diary';
 
 @Component({
-  selector: 'search-equipments',
-  templateUrl: './search-equipments.component.html',
-  styleUrls: ['./search-equipments.component.scss']
+  selector: 'equipment-search',
+  templateUrl: './equipment-search.component.html',
+  styleUrls: ['./equipment-search.component.scss']
 })
-export class SearchEquipmentsComponent extends StepComponent {
+export class EquipmentSearchComponent extends StepComponent {
   executionDiaries = [];
   formBuilder: FormBuilder;
-  constructor( formBuilder: FormBuilder, private searchEquipmentsService: SearchEquipmentsService ) {
+  constructor( formBuilder: FormBuilder, private equipmentSearchService: EquipmentSearchService ) {
     super();
     this.formBuilder = formBuilder;
   }
@@ -32,7 +32,7 @@ export class SearchEquipmentsComponent extends StepComponent {
     }
   }
   initializeExecutionDiaries() {
-    this.searchEquipmentsService.getAllExecutionDiaries().subscribe((diaries: Array<ExecutionDiary>) => {
+    this.equipmentSearchService.getAllExecutionDiaries().subscribe((diaries: Array<ExecutionDiary>) => {
       this.executionDiaries = diaries;
     })
   }

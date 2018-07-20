@@ -20,7 +20,7 @@ export class ErrorInterceptor implements HttpInterceptor {
                 this.authenticationService.logout(); 
                 location.reload(true); 
             } 
-            return throwError(error);
+            return throwError(err);
         }))
     }
 }

@@ -1,0 +1,12 @@
+<mat-dialog-content *ngIf = "isFormError()">
+    <div class = "ui-error-symbol">
+        <span class = "fa fa-warning"></span>
+    </div>
+    <div class = "ui-error-message">
+        Você precisa selecionar equipamento de origem e destino<br>
+        E realizar manobras.
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions class = "ui-modal-actions">
+    <button mat-button mat-dialog-close style="margin: auto">Fechar</button>
+</mat-dialog-actions>

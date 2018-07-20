@@ -3,11 +3,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { StepComponent } from '../../step.component';
 
 @Component({
-  selector: 'save-equipments-changes',
-  templateUrl: './save-equipments-changes.component.html',
-  styleUrls: ['./save-equipments-changes.component.scss']
+  selector: 'save-equipment-change',
+  templateUrl: './save-equipment-change.component.html',
+  styleUrls: ['./save-equipment-change.component.scss']
 })
-export class SaveEquipmentsChangesComponent extends StepComponent {
+export class SaveEquipmentChangeComponent extends StepComponent {
   executionDiaries = [];
   formBuilder: FormBuilder;
   constructor(formBuilder: FormBuilder) {

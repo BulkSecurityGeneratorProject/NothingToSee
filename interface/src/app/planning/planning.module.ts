@@ -17,7 +17,6 @@ for ( let key of keys ) {
   imports: [
     CustomMaterialModule,
     MatInputModule
-    
   ],
   entryComponents: dynamics
 })

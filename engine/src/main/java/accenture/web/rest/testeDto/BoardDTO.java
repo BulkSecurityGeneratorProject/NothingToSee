@@ -35,4 +35,7 @@ public class BoardDTO {
         this.ports = ports;
         this.id = id;
     }
+    public  BoardDTO() {
+
+    }
 }
