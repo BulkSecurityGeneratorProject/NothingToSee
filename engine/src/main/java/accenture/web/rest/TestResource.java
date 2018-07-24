@@ -82,25 +82,25 @@ public class TestResource {
 
         List<EquipmentDTO>  equipments = new ArrayList<>();
 
-        BoardDTO boardDTO1 = new BoardDTO("CTA-451-12-565", ports1, "13");
-        BoardDTO boardDTO2 = new BoardDTO("CTA-451-12-56123", ports2, "123");
-        BoardDTO boardDTO3 = new BoardDTO("CTA-451-2-565", ports3, "a");
+        BoardDTO boardDTO1 = new BoardDTO("CTA-451-12-565", ports1, "1");
+        BoardDTO boardDTO2 = new BoardDTO("CTA-451-12-56123", ports2, "2");
+        BoardDTO boardDTO3 = new BoardDTO("CTA-451-2-565", ports3, "3a");
         List<BoardDTO> boardDTOS1 = Arrays.asList( boardDTO1, boardDTO2, boardDTO3 );
 
-        BoardDTO boardDTO11 = new BoardDTO("CTA-OI", ports1, "s");
-        BoardDTO boardDTO22 = new BoardDTO("CTA-GOKU", ports2, "asd");
-        BoardDTO boardDTO33 = new BoardDTO("CTA-SOU", ports3, "123");
+        BoardDTO boardDTO11 = new BoardDTO("CTA-OI", ports1, "s4");
+        BoardDTO boardDTO22 = new BoardDTO("CTA-GOKU", ports2, "as5d");
+        BoardDTO boardDTO33 = new BoardDTO("CTA-SOU", ports3, "1236");
         List<BoardDTO> boardDTOS2 = Arrays.asList( boardDTO11, boardDTO22, boardDTO33 );
 
-        BoardDTO boardDTO14 = new BoardDTO("CTA-DARTH", ports1, "1");
-        BoardDTO boardDTO24 = new BoardDTO("CTA-VADER", ports2, "123");
-        BoardDTO boardDTO34 = new BoardDTO("CTA-VANISHasdasd", ports3, "lol");
-        BoardDTO boardDTO345 = new BoardDTO("CTA-VANISHasd", ports3, "132123123");
-        BoardDTO boardDTO341 = new BoardDTO("CTA-VANISHqe", ports2, "90");
-        BoardDTO boardDTO342 = new BoardDTO("CTA-VANISH123", ports3, "pp");
-        BoardDTO boardDTO343 = new BoardDTO("CTA-VANISH3", ports1, "gg");
-        BoardDTO boardDTO344 = new BoardDTO("CTA-VANISH3", ports2, "mm");
-        BoardDTO boardDTO3451 = new BoardDTO("CTA-VANISH123", ports3, "DKKI");
+        BoardDTO boardDTO14 = new BoardDTO("CTA-DARTH", ports1, "17");
+        BoardDTO boardDTO24 = new BoardDTO("CTA-VADER", ports2, "1283");
+        BoardDTO boardDTO34 = new BoardDTO("CTA-VANISHasdasd", ports3, "lol9");
+        BoardDTO boardDTO345 = new BoardDTO("CTA-VANISHasd", ports3, "13211-23123");
+        BoardDTO boardDTO341 = new BoardDTO("CTA-VANISHqe", ports2, "9022");
+        BoardDTO boardDTO342 = new BoardDTO("CTA-VANISH123", ports3, "pp11");
+        BoardDTO boardDTO343 = new BoardDTO("CTA-VANISH3", ports1, "gg12");
+        BoardDTO boardDTO344 = new BoardDTO("CTA-VANISH3", ports2, "m13");
+        BoardDTO boardDTO3451 = new BoardDTO("CTA-VANISH123", ports3, "DKKI14");
 
         List<BoardDTO> boardDTOS3 = Arrays.asList( boardDTO14, boardDTO24, boardDTO34, boardDTO345,boardDTO341,
             boardDTO342, boardDTO343, boardDTO3451, boardDTO344);

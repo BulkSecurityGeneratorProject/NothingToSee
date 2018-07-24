@@ -1,10 +1,18 @@
 <mat-dialog-content *ngIf = "isFormError()">
-    <div class = "ui-error-symbol">
+    <div class = "ui-symbol">
         <span class = "fa fa-warning"></span>
     </div>
-    <div class = "ui-error-message">
+    <div class = "ui-message">
         Você precisa selecionar equipamento de origem e destino<br>
         E realizar manobras.
+    </div>
+</mat-dialog-content>
+<mat-dialog-content *ngIf = "isFormSuccess()">
+    <div class = "ui-symbol ui-success-symbol">
+        <span class = "fa fa-check"></span>
+    </div>
+    <div class = "ui-message">
+        Não houve erro na simulação.
     </div>
 </mat-dialog-content>
 <mat-dialog-actions class = "ui-modal-actions">

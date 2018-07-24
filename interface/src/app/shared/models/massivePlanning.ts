@@ -2,31 +2,31 @@ import { Equipment } from "./equipment";
 import { Board } from "./board";
 
 export class MassivePlanning {
-    sourceEquipment: Equipment;
-    targetEquipment: Equipment;
+    sourceEquipmentId: string;
+    targetEquipmentId: string;
     boardsChange: Array<BoardChange>;
-    constructor(sourceEquipment, targetEquipment, boardsChange) {
-        this.sourceEquipment = sourceEquipment;
-        this.targetEquipment = targetEquipment;
+    constructor(sourceEquipmentId, targetEquipmentId, boardsChange) {
+        this.sourceEquipmentId = sourceEquipmentId;
+        this.targetEquipmentId = targetEquipmentId;
         this.boardsChange = boardsChange;
     }
 }
 
 export class BoardChange {
-    sourceBoard: Board;
-    targetBoard: Board;
+    sourceBoardId: string;
+    targetBoardId: string;
     constructor( board, type ) {
         if ( type === 'target' ) {
-            this.targetBoard = board;
+            this.targetBoardId = board;
         } else {
-            this.sourceBoard = board;
+            this.sourceBoardId = board;
         }
     }
     setBoardByType(board, type) {
         if ( type === 'target' ) {
-            this.targetBoard = board;
+            this.targetBoardId = board;
         } else {
-            this.sourceBoard = board;
+            this.sourceBoardId = board;
         }
     }
 }

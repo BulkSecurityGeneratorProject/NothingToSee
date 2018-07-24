@@ -4,6 +4,7 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import { FormGroup } from '@angular/forms';
 import { Step } from '../shared/models/step';
 import { PlanningComponent } from './planning.component';
+import { MatStepper } from '@angular/material';
 
 export abstract class StateComponent implements OnInit, OnDestroy, AfterContentInit {
     @ViewChild(DynamicDirective) dynamicHost: DynamicDirective;
@@ -52,6 +53,7 @@ export abstract class StateComponent implements OnInit, OnDestroy, AfterContentI
             instance['lastForm'] = this.stepsFormHistory[step.number -1];
         if (this.stepsFormHistory[ step.number ]) {
             instance['form'] = this.stepsFormHistory[step.number];
+            this.setForm(this.stepsFormHistory[step.number]);
         }
     }
     setForm( form: FormGroup ) {

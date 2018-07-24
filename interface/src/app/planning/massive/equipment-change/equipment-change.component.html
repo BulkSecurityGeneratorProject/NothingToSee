@@ -2,27 +2,28 @@
     <div class = "ui-source-board">
         <form [formGroup] = "form" class = "ui-change-form">
             <mat-form-field class = "ui-form-field"  formGroupName="massivePlanning">
-                <mat-select placeholder="Equipamento de origem" requerid formControlName="sourceEquipment"
+                <mat-select placeholder="Equipamento de origem" requerid formControlName="sourceEquipmentId"
                 (selectionChange) = "equipmentChanged()">
-                    <mat-option *ngFor = "let equipment of equipments" [value] = "equipment" >
+                    <mat-option *ngFor = "let equipment of equipments" [value] = "equipment.id" >
                         {{ equipment?.name }}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
         </form>
-        <div class = "ui-equipments-boards" *ngIf = "massivePlanning?.sourceEquipment && massivePlanning.sourceEquipment.boards.length !== dragController.elements['source']?.length" style = "transform: scaleX(-1)">
-            <div class = "ui-equipment-boards" style = "transform: scaleX(-1);" *ngFor = "let board of massivePlanning.sourceEquipment?.boards">
-                <button mat-button class = "ui-btn ui-btn-draggable ui-equipment-board" (drag) = "drag($event, 'source', board, sourceEquipment)"
+        <div class = "ui-equipments-boards" *ngIf = "massivePlanning?.sourceEquipmentId && sourceEquipmentBoards.length !== dragController.elements['source']?.length" style = "transform: scaleX(-1)">
+            <div class = "ui-equipment-boards" style = "transform: scaleX(-1);" *ngFor = "let board of sourceEquipmentBoards">
+                <button #elem mat-button class = "ui-btn ui-btn-draggable ui-equipment-board" (drag) = "drag($event, board.id, 'source')"
                 (dragend) = "dragEnd($event)"
                 [disabled] = "!canDrag('source')"
                 [draggable] = "canDrag('source')">
                     {{ board.name }}
+                    {{ controllerElement(elem, board, 'source') }}
                 </button>
             </div>
         </div>
-        <div class = "ui-equipment-board-empty" *ngIf = "!massivePlanning?.sourceEquipment || massivePlanning.sourceEquipment?.boards.length === dragController.elements['source']?.length">
+        <div class = "ui-equipment-board-empty" *ngIf = "!massivePlanning?.sourceEquipmentId || sourceEquipmentBoards.length === dragController.elements['source']?.length">
             <div style = "margin:auto">
-                {{ (!sourceEquipment) ? "Selecione equipamento de origem" : "Nenhuma placa" }}
+                {{ (!massivePlanning?.sourceEquipmentId) ? "Selecione equipamento de origem" : "Nenhuma placa" }}
             </div>
         </div>
     </div>
@@ -31,21 +32,21 @@
         </div>
         <div class = "ui-board-change" *ngFor = "let boardChange of massivePlanning?.boardsChange">
             <div class = "ui-board-change-source">
-                <div *ngIf = "!boardChange.sourceBoard" class = "ui-board-change-empty">
+                <div *ngIf = "!boardChange.sourceBoardId" class = "ui-board-change-empty">
                     Arraste uma placa do equipamento de origem
                 </div>
-                <div *ngIf = "boardChange.sourceBoard" class = "ui-board-change-description">
-                    <b>  Origem: </b> {{ boardChange.sourceBoard.name }}
-                    <b>  Quantidade de porta atuais: </b> {{ boardChange.sourceBoard.ports.length }}
+                <div *ngIf = "boardChange.sourceBoardId" class = "ui-board-change-description">
+                    <b>  Origem: </b> {{getBoardById(boardChange.sourceBoardId, 'source').name }}
+                    <b>  Quantidade de porta atuais: </b> {{ getBoardById(boardChange.sourceBoardId, 'source').ports.length }}
                 </div>
             </div>
             <div class = "ui-bord-change-target">
-                <div *ngIf = "!boardChange.targetBoard" class = "ui-board-change-empty">
+                <div *ngIf = "!boardChange.targetBoardId" class = "ui-board-change-empty">
                     Arraste uma placa do equipamento de destino
                 </div>
-                <div *ngIf = "boardChange.targetBoard" class = "ui-board-change-description">
-                    <b>  Destino: </b> {{ boardChange.targetBoard.name }}
-                    <b>  Quantidade de portas atuais: </b> {{ boardChange.targetBoard.ports.length }}
+                <div *ngIf = "boardChange.targetBoardId" class = "ui-board-change-description">
+                    <b>  Destino: </b> {{ getBoardById(boardChange.targetBoardId, 'target').name }}
+                    <b>  Quantidade de portas atuais: </b> {{ getBoardById(boardChange.targetBoardId, 'target').ports.length }}
                 </div>
             </div>
         </div>
@@ -56,27 +57,28 @@
     <div class = "ui-target-board">
         <form [formGroup] = "form" class = "ui-change-form">
             <mat-form-field class = "ui-form-field"  formGroupName="massivePlanning">
-                <mat-select placeholder="Equipamento de destino" requerid formControlName="targetEquipment" 
+                <mat-select #targetSelector placeholder="Equipamento de destino" requerid formControlName="targetEquipmentId" 
                 (selectionChange) = "equipmentChanged()">
-                    <mat-option *ngFor = "let equipment of equipments" [value] = "equipment" >
+                    <mat-option *ngFor = "let equipment of equipments" [value] = "equipment.id" selected>
                         {{ equipment?.name }}
                     </mat-option>
                 </mat-select>
             </mat-form-field>   
         </form>
-        <div class = "ui-equipments-boards" *ngIf = "massivePlanning?.targetEquipment && massivePlanning.targetEquipment.boards.length !== dragController.elements['target']?.length">
-            <div class = "ui-equipment-boards" *ngFor = "let board of massivePlanning.targetEquipment?.boards">
-                <button mat-button class = "ui-equipment-board ui-btn ui-btn-draggable" (drag) = "drag($event, 'target',  board, targetEquipment)"
+        <div class = "ui-equipments-boards" *ngIf = "massivePlanning?.targetEquipmentId && targetEquipmentBoards.length !== dragController.elements['target']?.length">
+            <div class = "ui-equipment-boards" *ngFor = "let board of targetEquipmentBoards">
+                <button #elem mat-button class = "ui-equipment-board ui-btn ui-btn-draggable" (drag) = "drag($event, board.id, 'target')"
                 (dragend) = "dragEnd($event)"
                 [disabled] = "!canDrag('target')"
                 [draggable] = "canDrag('target')">
                     {{ board.name }}
+                    {{ controllerElement(elem, board, 'target') }}
                 </button>
             </div>
         </div>
-        <div class = "ui-equipment-board-empty" *ngIf = "!massivePlanning?.targetEquipment || massivePlanning.targetEquipment?.boards.length === dragController.elements['target']?.length">
+        <div class = "ui-equipment-board-empty" *ngIf = "!massivePlanning?.targetEquipmentId || targetEquipmentBoards.length === dragController.elements['target']?.length">
             <div style = "margin:auto">
-                {{ (!targetEquipment) ? "Selecione equipamento de destino" : "Nenhuma placa" }}
+                {{ (!massivePlanning?.targetEquipmentId) ? "Selecione equipamento de destino" : "Nenhuma placa" }}
             </div>
         </div>
     </div>

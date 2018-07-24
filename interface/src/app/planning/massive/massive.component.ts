@@ -5,7 +5,6 @@ import { EquipmentChangeComponent } from './equipment-change/equipment-change.co
 import { SaveEquipmentChangeComponent } from './save-equipment-change/save-equipment-change.component';
 import { StateComponent } from '../state.component';
 import { MatStepper } from '@angular/material';
-import { FormGroup } from '@angular/forms';
 
 
 @Component({
@@ -15,7 +14,6 @@ import { FormGroup } from '@angular/forms';
 })
 export class MassiveComponent extends StateComponent {
     @ViewChild('stepper') stepper: MatStepper;
-    stepChangeDone = false;
     constructor( componentFactoryResolver: ComponentFactoryResolver) {
         super( componentFactoryResolver );
     }
@@ -23,22 +21,21 @@ export class MassiveComponent extends StateComponent {
         this.steps.push(new Step('Procurar equipamentos', Status.ACTUAL, EquipmentSearchComponent, 0));
         this.steps.push(new Step('Realizar manobras', Status.NOT_ACTIVATED, EquipmentChangeComponent, 1));
         this.steps.push(new Step('Simular e salvar', Status.NOT_ACTIVATED, SaveEquipmentChangeComponent, 2));
-        this.setInitialStep(0);
         this.eventStepChange();
+        this.setInitialStep(0);
     }
-    isCompleted( number: number ) {
-        let form: FormGroup = this.stepsFormHistory[number];
-        return (form) ? form.valid : false;
+    isLoaded(number: number) {
+        return (this.stepsFormHistory[number]) ? true : false;
     }
-    eventBackward( index ) {
-        this.stepper.previous();
-        super.eventBackward(index);
-        this.stepChangeDone = false;
+    eventForward(index) {
+        super.eventForward(index);
+        if (this.stepper.selectedIndex !== index) {
+            this.stepper.selectedIndex = index;
+        }
     }
     eventStepChange() {
         this.subscriptions.add(this.stepper.selectionChange.subscribe((event) => {
-            if ( event.selectedIndex !== this.step.number  && !this.stepChangeDone ) {
-                this.stepChangeDone = true;
+            if ( event.selectedIndex !== this.step.number ) {
                 let index = event.selectedIndex;
                 if ( index > this.step.number ) {
                     this.eventForward(index);
@@ -47,5 +44,9 @@ export class MassiveComponent extends StateComponent {
                 }
             }
         }))
+    }
+    setInitialStep(index) {
+        this.stepper.selectedIndex = index;
+        super.setInitialStep(index);
     }
 }

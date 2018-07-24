@@ -4,7 +4,7 @@
             <mat-icon class = "fa fa-check"></mat-icon>
         </div>
     </ng-template>
-    <mat-step [label] = "step.name" #matStep [completed] = "isCompleted(step.number)" *ngFor = "let step of steps">
+    <mat-step [label] = "step.name" #matStep [completed] = "isLoaded(step.number)" *ngFor = "let step of steps">
     </mat-step>
 </mat-horizontal-stepper>
 <ng-template dynamic-host></ng-template>
