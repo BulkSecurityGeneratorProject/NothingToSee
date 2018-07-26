@@ -1,9 +1,8 @@
 @import "../app.component.scss";
 .ui-stepper {
     float: left;
-    height: calc(100% - 50px);
+    height: calc(100vh - 120px);
     width: 100%;
-    padding-top: 10px;
 }
 .ui-stepper-container {
     float: left;
@@ -33,13 +32,72 @@
 }
 
 .ui-planning-home {
+    float: left;
     width: 100%;
-    height: 100%;
+    height: auto;
+    min-height: 100%;
     display: flex;
     align-content: center;
     align-items: center;
 }
 .ui-planning-home-option {
     margin: auto;
-    display: table;
+    display: block;
+}
+.ui-container-card {
+    float: left;
+    width: 250px;
+    min-height: 160px;
+    display: block;
+    cursor: default;
+}
+// .ui-container-card:hover {
+//     box-shadow: 0px 0px 3px 1px $ui-primary-dark-border-color;
+//     border:none;
+// }
+.ui-card-divisor {
+    border-right: 1px solid $ui-primary-dark-border-color;
+}
+@media(max-width: 560px) {
+    .ui-container-card {
+        width: calc(100% - 20px);
+    }
+    .ui-card-divisor {
+        border-right: none;
+    }
+}
+
+.ui-card-icon {
+    float: left;
+    width:100%;
+    height: 32px;
+    text-align: center;
+    color: $ui-primary-dark-text-color;
+    font-size:32px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.ui-card-description {
+    float: left;
+    width: 100%;
+    min-height: 50px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    word-wrap: break-word;
+    text-align: center;
+}
+
+.ui-card-action {
+    float: left;
+    width: 100%;
+    height: 20px;
+    display: flex;
+    align-content: center;
+    align-items: center;
+    padding: 10px;
+}
+.ui-card-action > button {
+    margin:auto;
+    border: none;
+    border-radius: 0px;
 }

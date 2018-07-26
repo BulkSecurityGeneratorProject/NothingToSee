@@ -25,7 +25,8 @@ export class EquipmentChangeComponent extends StepComponent {
   @ViewChild('dropPlace') dropPlace: ElementRef;
   @ViewChild('targetSelector') targetSelector: MatSelect;
   
-  equipmentesLoaded$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  equipmentsLoaded$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  ready$: BehaviorSubject<boolean> = new BehaviorSubject(false);
   
   actualBoardChange: BoardChange;
   controllerElements: Set<any> = new Set();
@@ -43,46 +44,65 @@ export class EquipmentChangeComponent extends StepComponent {
     this.formBuilder = formBuilder;
   }
   ngAfterContentInit() {
-    this.state.ready$.subscribe((ready) => {
+    this.subscription.add(this.state.ready$.subscribe((ready) => {
       if (ready) {
         setTimeout(() => {
           this.state.setForm( this.form );
+          this.subscription.add(this.equipmentsLoaded$.subscribe((loaded) => {
+            if (loaded) {
+              this.ready$.next(true);
+            }
+          }))
         })
       }
-    })
+    }))
   }
   ngOnInit() {
-    this.initializeForms();
     this.initializeEquipments();
+    this.initializeForms();
     this.dragController = new DragAndDrop(this.dropPlace.nativeElement);
   }
   
+  addDroppedAndTestIfIsImcomplete(id, type) {
+    if (id) {
+      this.dragController.hasANewDrop(this.controllerElements[id + '-' + type])
+    } else {
+      this.lastDragged = (type === 'target') ? 'source' : 'target';
+      return true;
+    }
+    return false;
+  }
   canDrag(type) {
     return this.lastDragged != type;
   }
   completeBoardChange(element: DropElement) {
-    this.actualBoardChange.setBoardByType(element.data.board, element.type);
+    this.actualBoardChange.setBoardByType(element.data.board.id, element.type);
     this.actualBoardChange = undefined;
     this.lastDragged = undefined;
   }
   controllerElement(matElement: MatButton, board: Board, type: string) {
-    let htmlElement = matElement._elementRef.nativeElement;
-    let data = {board:board, equipment: Equipment}
-    this.controllerElements.add(board.id + '-' + type);
-    this.controllerElements[board.id + '-' + type] = new DropElement(htmlElement, type, data);
+    if (!this.controllerElements.has(board.id + '-' + type)) {
+      matElement.disableRipple=true;
+      let htmlElement = matElement._elementRef.nativeElement;
+      let data = {board:board, equipment: Equipment}
+      this.controllerElements.add(board.id + '-' + type);
+      this.controllerElements[board.id + '-' + type] = new DropElement(htmlElement, type, data, false);
+    }
   }
   createBoardChange(element: DropElement) {
-    this.actualBoardChange = new BoardChange(element.data.board, element.type)
+    this.actualBoardChange = new BoardChange(element.data.board.id, element.type)
     let formGroup = <FormGroup>this.form.controls['massivePlanning'];
     let value = formGroup.get('boardsChange').value;
     if (!value) {
       value = [];
-      formGroup.get('boardsChange').setValue(value);
     } 
     value.push(this.actualBoardChange);
+    formGroup.get('boardsChange').setValue(value);
   }
   drag(ev, id: number, type) {
-    this.dragController.drag(ev, this.controllerElements[id + '-' + type]);
+    if (type ) {
+      this.dragController.drag(ev, this.controllerElements[id + '-' + type]);
+    }
   }
   dragEnd(ev) {
     this.dragController.dragEnd(ev);
@@ -98,8 +118,10 @@ export class EquipmentChangeComponent extends StepComponent {
       this.createBoardChange(actualElement);
       this.lastDragged = actualElement.type;
     }
-    
+
+    this.removeBoard(actualElement.data.board, actualElement.type);
     this.dragController.drop(ev);
+    this.simulationResult = undefined
   }
   equipmentBoards(type) {
     let id = this.massivePlanning[type + 'EquipmentId'];
@@ -107,23 +129,62 @@ export class EquipmentChangeComponent extends StepComponent {
       return equipment.id === id;
     });
     if (equipmentsFiltered.length === 1) {
-      return equipmentsFiltered[0].boards
+      return [...equipmentsFiltered[0].boards]
     } else if (equipmentsFiltered.length > 1) {
       throw new Error('Mais de um equipamento com o mesmo id.');
     }
   }
-  equipmentChanged() {
-    if (this.haveBoardChangeCompleted()) {
+  eventEquipmentChanged(type) {
+    if (this.needToResetBoardChanges(type)) {
       this.dragController.removeAll();
-      this.resetBoardChanges();
+      this.resetBoardChanges(type);
     }
   }
   eventFormChanges() {
-    this.subscription.add(this.form.get('massivePlanning').valueChanges.subscribe((massivePlanning) => {
+    this.subscription.add(this.form.get('massivePlanning').valueChanges.subscribe((massivePlanning: MassivePlanning) => {
+      let old = this.massivePlanning;
+      let typeToReset = '';
       this.massivePlanning = massivePlanning;
-      this.sourceEquipmentBoards = this.equipmentBoards('source');
-      this.targetEquipmentBoards = this.equipmentBoards('target');
+      if (!old || old.sourceEquipmentId != massivePlanning.sourceEquipmentId) {
+        this.updateSourceAndTargetBoards('source');
+        typeToReset = 'source';
+      }
+      if (!old || old.targetEquipmentId != massivePlanning.targetEquipmentId) {
+        this.updateSourceAndTargetBoards('target');
+        typeToReset = 'target'
+      }
+
+      this.controllerElements.forEach((key: string) => {
+        if (key.includes(typeToReset)) {
+          this.removeControllerElement(key);
+        }
+      })
     }));
+  }
+  eventRemoveBoardChange(boardChange: BoardChange) {
+    if (boardChange.sourceBoardId) {
+      let key = boardChange.sourceBoardId + '-source';
+      this.revertDropped(key);
+    }
+    if (boardChange.targetBoardId) {
+      let key = boardChange.targetBoardId + '-target';
+      this.revertDropped(key);
+    }
+
+    if (this.actualBoardChange === boardChange) {
+      this.lastDragged = undefined;
+      this.actualBoardChange = undefined;
+    }
+    let formGroup = <FormGroup>this.form.controls['massivePlanning'];
+    let boardChanges = formGroup.get('boardsChange').value
+    for (let i = 0; i < boardChanges.length; i++) {
+      let board = boardChanges[i];
+      if (board === boardChange) {
+        boardChanges.splice(i, 1);
+        formGroup.get('boardsChange').setValue(boardChanges);
+      }
+    }
+    this.simulationResult = undefined
   }
   eventSave() {
     if (this.validateForm()) {
@@ -131,35 +192,21 @@ export class EquipmentChangeComponent extends StepComponent {
     }
   }
   eventSimulation() {
-    if (this.validateForm()) {
+    let validationMessage: string = this.validateForm();
+    if (validationMessage === '') {
       this.equipmentsChangeService.simulation(this.form.getRawValue()).subscribe((result) => {
         this.simulationResult = [];
-        this.loadSimulationErrorModal(EquimentChangeStatusType.VALID_SIMULATION)
+        this.loadSimulationErrorModal(EquimentChangeStatusType.VALID_SIMULATION, 'Sucesso na simulação.')
       },(error => {
         this.simulationResult = false;
       }))
     } else {
-      this.loadSimulationErrorModal(EquimentChangeStatusType.INVALID_FORM);
+      this.loadSimulationErrorModal(EquimentChangeStatusType.INVALID_FORM, validationMessage);
     }
   }
-  getBoardById(id: string, type) {
-    let boards;
-    if ( type === 'target' ) {
-      boards = this.targetEquipmentBoards.filter((board: Board) => {
-        return board.id === id;
-      })
-    } else if (type === 'source') {
-      boards = this.targetEquipmentBoards.filter((board: Board) => {
-        return board.id === id;
-      })
-    } else {
-      throw new Error('Tipo de placa não encontrada.');
-    }
-    if (boards.length === 1) {
-      return boards[0];
-    } else {
-      throw new Error('Mais de uma board com o mesmo id');
-    }
+  getBoardById(boardId: string, type) {
+    let controllerElement: DropElement = this.controllerElements[boardId + '-' + type];
+    return controllerElement.data.board;
   }
   initializeForms() {
     if ( !this.form ) {
@@ -167,11 +214,11 @@ export class EquipmentChangeComponent extends StepComponent {
         massivePlanning: this.formBuilder.group({
           sourceEquipmentId: [null, Validators.required],
           targetEquipmentId: [null, Validators.required],
-          boardsChange: []
+          boardsChange: [[]]
         })
       })
     } else {
-      this.subscription.add(this.equipmentesLoaded$.subscribe((loaded) => {
+      this.subscription.add(this.ready$.subscribe((loaded) => {
         if (loaded) {
           this.updateView();
         }
@@ -182,30 +229,80 @@ export class EquipmentChangeComponent extends StepComponent {
   initializeEquipments() {
     this.equipmentsChangeService.getEquipments( this.lastForm.getRawValue() )
       .subscribe((equipments) =>  {
-        this.equipments = equipments
-        this.equipmentesLoaded$.next(true);
+        this.equipments = equipments;
+        this.equipmentsLoaded$.next(true);
       });
   }
-  haveBoardChangeCompleted() {
-    if (this.actualBoardChange && (!this.actualBoardChange.sourceBoardId || !this.actualBoardChange.targetBoardId)) {
-      return this.massivePlanning.boardsChange.length > 1;
+  needToResetBoardChanges(type) {
+    if (type === this.lastDragged) {
+      return true;
     }
-    return this.massivePlanning && this.massivePlanning.boardsChange && this.massivePlanning.boardsChange.length > 0;
+    else if (this.actualBoardChange && (!this.actualBoardChange.sourceBoardId || !this.actualBoardChange.targetBoardId)) {
+      return this.massivePlanning.boardsChange.length > 1;
+    } else {
+      return true;
+    }
   }
-  loadSimulationErrorModal(statusType: EquimentChangeStatusType) {
+  loadSimulationErrorModal(statusType: EquimentChangeStatusType, message: string) {
     this.dialogRef = this.dialog.open(ModalStatus);
     this.dialogRef.componentInstance['statusType'] = statusType;
+    this.dialogRef.componentInstance['message'] = message;
+    
   }
-  resetBoardChanges() {
+  removeBoard(board: Board, type) {
+    let elements = (type === 'target') ? this.targetEquipmentBoards : this.sourceEquipmentBoards;
+    for (let i = 0; i < elements.length; i++) {
+      if (elements[i] === board) {
+        elements.splice(i, 1);
+        return;
+      }
+    }
+  }
+  removeControllerElement(key) {
+    let controllerElement: DropElement = this.controllerElements[key];
+    this.dragController.removeDropElement(controllerElement);
+    this.controllerElements.delete(key);
+  }
+  resetBoardChanges(type) {
     this.actualBoardChange = undefined;
-    this.controllerElements.clear();
     this.lastDragged = undefined;
-    this.form.get('massivePlanning').get('boardsChange').setValue([]);
     this.simulationResult = undefined;
+    let boardChanges = this.massivePlanning.boardsChange;
+    for(let boardChange of boardChanges) {
+      if (boardChange.sourceBoardId && type !== 'source') {
+        let key = boardChange.sourceBoardId + '-source';
+        this.revertDropped(key);
+      }
+      if (boardChange.targetBoardId && type !== 'target') {
+        let key = boardChange.targetBoardId + '-target';
+        this.revertDropped(key);
+      }
+    }
+    this.form.get('massivePlanning').get('boardsChange').setValue([]);
+  }
+  revertDropped(key: string) {
+    let controllerElement = this.controllerElements[key];
+    if (controllerElement.type === 'target') {
+      this.targetEquipmentBoards.push(controllerElement.data.board);
+    } else if (controllerElement.type === 'source') {
+      this.sourceEquipmentBoards.push(controllerElement.data.board);
+    }
+    this.removeControllerElement(key)
+  }
+  validateBoardChanges() {
+    if (!this.massivePlanning.boardsChange || this.massivePlanning.boardsChange.length === 0) {
+      return 'Não há manobras.';
+    }
+    for (let boardChange of this.massivePlanning.boardsChange) {
+      if (!boardChange.sourceBoardId || !boardChange.targetBoardId) {
+        return 'Existem manobras imcompletas.'
+      }
+    }
+    return '';
   }
   validateForm() {
-    if (this.form.valid && this.massivePlanning.boardsChange.length > 0) {
-      return true;
+    if (this.form.valid) {
+      return this.validateBoardChanges();
     } else {
       for (let i in this.form.controls) {
         let massivePlanningFormGroup:FormGroup = <FormGroup>this.form.controls[i];
@@ -213,13 +310,45 @@ export class EquipmentChangeComponent extends StepComponent {
           massivePlanningFormGroup.controls[j].markAsTouched();
         }
       }
-      return false;
+      return 'Você precisa selecionar equipamento de origem e destino'+
+      '\n e realizar manobras.';
+    }
+  }
+  updateDragAndDrop() {
+    let boardChanges = this.massivePlanning.boardsChange;
+    
+    if (!boardChanges) {
+      return;
+    }
+
+    for (let boardChange of boardChanges) {
+      let imcompleteSource = this.addDroppedAndTestIfIsImcomplete(boardChange.sourceBoardId, 'source');
+      let imcompleteTarget = this.addDroppedAndTestIfIsImcomplete(boardChange.targetBoardId, 'target');
+      if (imcompleteSource && imcompleteTarget) {
+        throw new Error('Uma troca de placa sem origem e sem destino');
+      }
+      let imcomplete = imcompleteSource || imcompleteTarget;
+      if (imcomplete && !this.actualBoardChange) {
+          this.actualBoardChange = boardChange;
+      } else if(imcomplete) {
+        throw new Error('Mais de uma manobras não finalizadas.')
+      }
+    }
+  }
+  updateSourceAndTargetBoards(type) {
+    let boards = this.equipmentBoards(type);
+    if (type === 'source' && boards) {
+      this.sourceEquipmentBoards = boards;
+    } else if (type === 'target' && boards) {
+      this.targetEquipmentBoards = boards;
     }
   }
   updateView() {
     this.massivePlanning = this.form.get('massivePlanning').value;
-    this.sourceEquipmentBoards = this.equipmentBoards('source');
-    this.targetEquipmentBoards = this.equipmentBoards('target');
-    
+    this.updateSourceAndTargetBoards('source');
+    this.updateSourceAndTargetBoards('target');
+    setTimeout(() => {
+      this.updateDragAndDrop();
+    })
   }
 }

@@ -9,6 +9,7 @@ import { EquimentChangeStatusType } from "../equipment-change-status.enum";
 export class ModalStatus implements OnInit{
     // injected by father component;
     statusType: EquimentChangeStatusType;
+    message: string;
     constructor() {}
     ngOnInit() {}
     isFormError() {

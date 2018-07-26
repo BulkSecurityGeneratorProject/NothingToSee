@@ -68,8 +68,8 @@ public class TestResource {
         List<Map<String, String>> boardChangeDTOS = new ArrayList<>();
         for(BoardChangeDTO boardChangeDTO: massivePlanning.getBoardsChange()) {
             Map<String, String> incompatible = new HashMap<>();
-            incompatible.put("sourceBoardId", boardChangeDTO.getSourceBoard().getId());
-            incompatible.put("targetBoardId", boardChangeDTO.getTargetBoard().getId());
+            incompatible.put("sourceBoardId", boardChangeDTO.getSourceBoardId());
+            incompatible.put("targetBoardId", boardChangeDTO.getTargetBoardId());
             boardChangeDTOS.add(incompatible);
         }
         return new ResponseEntity<List<Map<String, String>>>(boardChangeDTOS, HttpStatus.CREATED);

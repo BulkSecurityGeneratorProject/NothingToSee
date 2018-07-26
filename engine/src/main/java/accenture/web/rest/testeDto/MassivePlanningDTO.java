@@ -3,25 +3,21 @@ package accenture.web.rest.testeDto;
 import java.util.List;
 
 public class MassivePlanningDTO {
-//    public MassivePlanningDTO(EquipmentDTO sourceEquipment, EquipmentDTO targetEquipmen) {
-//        this.sourceEquipment = sourceEquipment;
-//        this.targetEquipment = targetEquipment;
-//    }
 
-    public EquipmentDTO getSourceEquipment() {
-        return sourceEquipment;
+    public String getSourceEquipmentId() {
+        return sourceEquipmentId;
     }
 
-    public void setSourceEquipment(EquipmentDTO sourceEquipment) {
-        this.sourceEquipment = sourceEquipment;
+    public void setSourceEquipmentId(String sourceEquipmentId) {
+        this.sourceEquipmentId = sourceEquipmentId;
     }
 
-    public EquipmentDTO getTargetEquipment() {
-        return targetEquipment;
+    public String getTargetEquipmentId() {
+        return targetEquipmentId;
     }
 
-    public void setTargetEquipment(EquipmentDTO targetEquipment) {
-        this.targetEquipment = targetEquipment;
+    public void setTargetEquipmentId(String targetEquipmentId) {
+        this.targetEquipmentId = targetEquipmentId;
     }
 
     public List<BoardChangeDTO> getBoardsChange() {
@@ -32,7 +28,7 @@ public class MassivePlanningDTO {
         this.boardsChange = boardsChange;
     }
 
-    EquipmentDTO sourceEquipment;
-    EquipmentDTO targetEquipment;
+    String sourceEquipmentId;
+    String targetEquipmentId;
     List<BoardChangeDTO> boardsChange;
 }

@@ -3,14 +3,14 @@
         <form [formGroup] = "form" class = "ui-change-form">
             <mat-form-field class = "ui-form-field"  formGroupName="massivePlanning">
                 <mat-select placeholder="Equipamento de origem" requerid formControlName="sourceEquipmentId"
-                (selectionChange) = "equipmentChanged()">
+                (selectionChange) = "eventEquipmentChanged('source')">
                     <mat-option *ngFor = "let equipment of equipments" [value] = "equipment.id" >
                         {{ equipment?.name }}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
         </form>
-        <div class = "ui-equipments-boards" *ngIf = "massivePlanning?.sourceEquipmentId && sourceEquipmentBoards.length !== dragController.elements['source']?.length" style = "transform: scaleX(-1)">
+        <div class = "ui-equipments-boards" *ngIf = "massivePlanning?.sourceEquipmentId && sourceEquipmentBoards?.length > 0" style = "transform: scaleX(-1)">
             <div class = "ui-equipment-boards" style = "transform: scaleX(-1);" *ngFor = "let board of sourceEquipmentBoards">
                 <button #elem mat-button class = "ui-btn ui-btn-draggable ui-equipment-board" (drag) = "drag($event, board.id, 'source')"
                 (dragend) = "dragEnd($event)"
@@ -21,7 +21,7 @@
                 </button>
             </div>
         </div>
-        <div class = "ui-equipment-board-empty" *ngIf = "!massivePlanning?.sourceEquipmentId || sourceEquipmentBoards.length === dragController.elements['source']?.length">
+        <div class = "ui-equipment-board-empty" *ngIf = "!massivePlanning?.sourceEquipmentId || sourceEquipmentBoards?.length === 0">
             <div style = "margin:auto">
                 {{ (!massivePlanning?.sourceEquipmentId) ? "Selecione equipamento de origem" : "Nenhuma placa" }}
             </div>
@@ -31,6 +31,9 @@
         <div #dropPlace hidden = "true">
         </div>
         <div class = "ui-board-change" *ngFor = "let boardChange of massivePlanning?.boardsChange">
+            <div class = "ui-board-remove-change" (click) = "eventRemoveBoardChange(boardChange)">
+                <span class = "fa fa-trash"></span>
+            </div>
             <div class = "ui-board-change-source">
                 <div *ngIf = "!boardChange.sourceBoardId" class = "ui-board-change-empty">
                     Arraste uma placa do equipamento de origem
@@ -58,14 +61,14 @@
         <form [formGroup] = "form" class = "ui-change-form">
             <mat-form-field class = "ui-form-field"  formGroupName="massivePlanning">
                 <mat-select #targetSelector placeholder="Equipamento de destino" requerid formControlName="targetEquipmentId" 
-                (selectionChange) = "equipmentChanged()">
+                (selectionChange) = "eventEquipmentChanged('target')">
                     <mat-option *ngFor = "let equipment of equipments" [value] = "equipment.id" selected>
                         {{ equipment?.name }}
                     </mat-option>
                 </mat-select>
             </mat-form-field>   
         </form>
-        <div class = "ui-equipments-boards" *ngIf = "massivePlanning?.targetEquipmentId && targetEquipmentBoards.length !== dragController.elements['target']?.length">
+        <div class = "ui-equipments-boards" *ngIf = "massivePlanning?.targetEquipmentId && targetEquipmentBoards?.length > 0">
             <div class = "ui-equipment-boards" *ngFor = "let board of targetEquipmentBoards">
                 <button #elem mat-button class = "ui-equipment-board ui-btn ui-btn-draggable" (drag) = "drag($event, board.id, 'target')"
                 (dragend) = "dragEnd($event)"
@@ -76,7 +79,7 @@
                 </button>
             </div>
         </div>
-        <div class = "ui-equipment-board-empty" *ngIf = "!massivePlanning?.targetEquipmentId || targetEquipmentBoards.length === dragController.elements['target']?.length">
+        <div class = "ui-equipment-board-empty" *ngIf = "!massivePlanning?.targetEquipmentId || targetEquipmentBoards?.length === 0">
             <div style = "margin:auto">
                 {{ (!massivePlanning?.targetEquipmentId) ? "Selecione equipamento de destino" : "Nenhuma placa" }}
             </div>

@@ -2,27 +2,27 @@ package accenture.web.rest.testeDto;
 
 public class BoardChangeDTO {
     public BoardChangeDTO() {}
-    public BoardChangeDTO(BoardDTO sourceBoard, BoardDTO targetBoard) {
-        this.sourceBoard = sourceBoard;
-        this.targetBoard = targetBoard;
+    public BoardChangeDTO(String sourceBoardId, String targetBoard) {
+        this.sourceBoardId = sourceBoardId;
+        this.targetBoardId = targetBoard;
     }
 
-    public BoardDTO getSourceBoard() {
-        return sourceBoard;
+    public String getSourceBoardId() {
+        return sourceBoardId;
     }
 
-    public void setSourceBoard(BoardDTO sourceBoard) {
-        this.sourceBoard = sourceBoard;
+    public void setSourceBoardId(String sourceBoardId) {
+        this.sourceBoardId = sourceBoardId;
     }
 
-    public BoardDTO getTargetBoard() {
-        return targetBoard;
+    public String getTargetBoardId() {
+        return targetBoardId;
     }
 
-    public void setTargetBoard(BoardDTO targetBoard) {
-        this.targetBoard = targetBoard;
+    public void setTargetBoardId(String targetBoardId) {
+        this.targetBoardId = targetBoardId;
     }
-    BoardDTO sourceBoard;
-    BoardDTO targetBoard;
+    String sourceBoardId;
+    String targetBoardId;
 
 }

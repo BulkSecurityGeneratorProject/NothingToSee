@@ -1,28 +1,41 @@
-<div class = "ui-stepper">
+<div [hidden] = "isHome" class = "ui-stepper">
   <div class = "ui-stepper-container">
     <ng-template dynamic-host></ng-template>
-    <div *ngIf = "isHome" class = "ui-planning-home">
-      <div class = "ui-planning-home-option">
-        <!-- {{ states[key].name }} -->
-        <div class = "ui-container-card" *ngFor = "let key of statesKeys">
-          <mat-card class="ui-card">
-            <mat-card-header>
-              <div mat-card-avatar class="example-header-image">
-                <span [class] = "states[key].icon"></span>
-              </div>
-              <mat-card-title>{{states[key].name}}</mat-card-title>
-            </mat-card-header>
-            <mat-card-content>
-                {{states[key].description}}
-            </mat-card-content>
-            <mat-card-actions>
-              <button (click) = "setState(key)" mat-button class = "ui-btn ui-btn-primary ui-btn-small">
-                Realizar
-              </button>
-            </mat-card-actions>
-          </mat-card>
-        </div>
+  </div>
+</div>
+<div *ngIf = "isHome" class = "ui-planning-home">
+  <div class = "ui-planning-home-option">
+    <!-- {{ states[key].name }} --> 
+    <div [ngClass] = "{'ui-card-divisor': i + 1 !== statesKeys.length,
+      'ui-container-card': true}
+      " *ngFor = "let key of statesKeys; let i = index">
+      <div class = "ui-card-icon">
+        <span [class] = "states[key].icon"></span>
       </div>
-    </div>
+      <div class = "ui-card-description">
+          {{states[key].description}}
+      </div>
+      <div class = "ui-card-action">
+        <button (click) = "setState(key)" mat-button class = "ui-btn ui-btn-primary ui-btn-small">
+          Manobrar
+        </button>
+      </div>
+      <!-- <mat-card class="ui-card">
+        <mat-card-header>
+          <div mat-card-avatar class="example-header-image">
+            <span [class] = "states[key].icon"></span>
+          </div>
+          <mat-card-title>{{states[key].name}}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            {{states[key].description}}
+        </mat-card-content>
+        <mat-card-actions>
+          <button (click) = "setState(key)" mat-button class = "ui-btn ui-btn-primary ui-btn-small">
+            Realizar
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div> -->
   </div>
 </div>
